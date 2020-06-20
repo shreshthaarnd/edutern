@@ -30,4 +30,6 @@ urlpatterns = [
     path('adminindex/',adminindex),
     path('adminlogin/',adminlogin),
     path('admincodorderlist/',admincodorderlist),
+    path('login/',login),
+    path('registration/',registration),
 ]

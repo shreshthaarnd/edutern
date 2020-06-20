@@ -23,3 +23,7 @@ def adminlogin(request):
 	return render(request,'adminpages/login.html',{})
 def admincodorderlist(request):
 	return render(request,'adminpages/codorderlist.html',{})
+def login(request):
+	return render(request,'login.html',{})
+def registration(request):
+	return render(request,'registration.html',{})
