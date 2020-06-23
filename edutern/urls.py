@@ -14,6 +14,7 @@ urlpatterns = [
     path('courses/',courses),
     path('elements/',elements),
     path('singleblog/',singleblog),
+    path('userdashboard/',userdashboard),
 
     path('adminindex/',adminindex),
     path('adminlogin/',adminlogin),

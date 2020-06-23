@@ -102,3 +102,5 @@ def admincourselist(request):
 		return render(request,'adminpages/courselist.html',dic)
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def userdashboard(request):
+	return render(request,'userdashboard.html',{})
