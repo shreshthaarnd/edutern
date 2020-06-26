@@ -106,3 +106,13 @@ def userdashboard(request):
 	return render(request,'userdashboard.html',{})
 def courseplayer(request):
 	return render(request,'courseplayer.html',{})
+def adminaddlectures(request):
+	return render(request,'adminpages/addlectures.html',{})
+def adminlectureslist(request):
+	return render(request,'adminpages/lectureslist.html',{})
+def adminuserslist(request):
+	return render(request,'adminpages/userslist.html',{})
+def adminactiveusers(request):
+	return render(request,'adminpages/activeusers.html',{})
+def admindeactiveusers(request):
+	return render(request,'adminpages/deactiveusers.html',{})

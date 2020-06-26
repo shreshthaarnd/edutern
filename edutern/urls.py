@@ -24,6 +24,11 @@ urlpatterns = [
     path('adminaddcourse/',adminaddcourse),
     path('adminsavecourse/',adminsavecourse),
     path('admincourselist/',admincourselist),
+    path('adminaddlectures/',adminaddlectures),
+    path('adminlectureslist/',adminlectureslist),
+    path('adminuserslist/',adminuserslist),
+    path('adminactiveusers/',adminactiveusers),
+    path('admindeactiveusers/',admindeactiveusers),
     
     path('login/',login),
     path('registration/',registration),
