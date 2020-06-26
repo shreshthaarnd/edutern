@@ -104,3 +104,5 @@ def admincourselist(request):
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def userdashboard(request):
 	return render(request,'userdashboard.html',{})
+def courseplayer(request):
+	return render(request,'courseplayer.html',{})
