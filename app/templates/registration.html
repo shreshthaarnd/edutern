@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
-    <title>Registration</title>
+    <title>Edutern - Registration</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}">
@@ -134,25 +134,24 @@
     <section class="contact_area section_gap">
         <div class="container">
             <div class="row">
+                <h1>Registration Here</h1>
                 <div style="padding:50px;width:100%;"class="column">
-                    <form class="row contact_form" action="contact_process.php" method="post" id="contactForm"
-                        novalidate="novalidate">
-                        
-                        
+                    <form class="row contact_form" action="/saveuser/" method="POST">
+
                             <div style="width:100%;"class="form-group">
-                                <input class="form-control" name="First Name"  rows="1" placeholder="First Name">
+                                <input type="text" class="form-control" name="fname" placeholder="First Name" required>
                             </div>
                             <div style="width:100%;"class="form-group">
-                                <input style="margin-bottom:10px;"class="form-control" name="Last Name"  rows="1" placeholder="Last Name">
+                                <input type="text" style="margin-bottom:10px;"class="form-control" name="lname" placeholder="Last Name" required>
                             </div>
                             <div style="width:100%;"class="form-group">
-                                <input style="margin-bottom:10px;"class="form-control" name="Email"  rows="1" placeholder="Email">
+                                <input type="email" style="margin-bottom:10px;"class="form-control" name="email" placeholder="Email" required>
                             </div>
                             <div style="width:100%;"class="form-group">
-                                <input style="margin-bottom:10px;"class="form-control" name="Phone"  rows="1" placeholder="Phone">
+                                <input type="number" style="margin-bottom:10px;"class="form-control" name="mobile" placeholder="Mobile" required>
                             </div>
                             <div style="width:100%;"class="form-group">
-                                <input style="margin-bottom:10px;"class="form-control" name="Password"  rows="1" placeholder="Password">
+                                <input type="password" style="margin-bottom:10px;"class="form-control" name="password" placeholder="Password" required>
                             </div>
                         
                         <div style="width:100%;"class="form-group">

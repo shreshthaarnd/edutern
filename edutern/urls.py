@@ -14,6 +14,10 @@ urlpatterns = [
     path('courses/',courses),
     path('elements/',elements),
     path('singleblog/',singleblog),
+    path('saveuser/',saveuser),
+    path('resendotp/',resendotp),
+    path('verify/',verifyuser),
+    path('checklogin/',checklogin),
     path('userdashboard/',userdashboard),
 
     path('adminindex/',adminindex),

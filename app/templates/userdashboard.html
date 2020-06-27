@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
-    <title>Blog</title>
+    <title>Edutern - User Dashboard</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}">
@@ -115,12 +115,8 @@
                     <div class="col-lg-6">
                         <div class="banner_content text-center">
                             <h2>User Dashboard</h2>
-                            <p>In the history of modern astronomy, there is probably no one greater leap forward than
-                                the
-                                building and launch of the space telescope known as the Hubble.</p>
                             <div class="page_link">
-                                <a href="index.html">Home</a>
-                                <a href="blog.html">Userdashboard</a>
+                                <a href="/userdashboard/">Hi Name Welcome Back!</a>
                             </div>
                         </div>
                     </div>
@@ -134,20 +130,22 @@
     <section class="blog_categorie_area">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="categories_post">
-                        <img src="{% static 'img/blog/cat-post/cat-post-3.jpg' %}" alt="post">
-                        <div class="categories_details">
-                            <div class="categories_text">
-                                <a href="#courses" onclick="document.getElementById('courses').style.display='block';">
-                                    <h5>My Courses</h5>
-                                </a>
-                                <div class="border_line"></div>
-                                <p>Your All Courses Here.</p>
+                <a href="#courses" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
+                    <div class="col-lg-4">
+                        <div class="categories_post">
+                            <img src="{% static 'img/blog/cat-post/cat-post-3.jpg' %}" alt="post">
+                            <div class="categories_details">
+                                <div class="categories_text">
+                                    <a href="#courses" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
+                                        <h5>My Courses</h5>
+                                    </a>
+                                    <div class="border_line"></div>
+                                    <p>Your All Courses Here</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
                 <div class="col-lg-4">
                     <div class="categories_post">
                         <img src="{% static 'img/blog/cat-post/cat-post-2.jpg' %}" alt="post">
@@ -162,20 +160,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="categories_post">
-                        <img src="{% static 'img/blog/cat-post/cat-post-1.jpg' %}" alt="post">
-                        <div class="categories_details">
-                            <div class="categories_text">
-                                <a href="#account" onclick="document.getElementById('account').style.display='block';">
-                                    <h5>My Account</h5>
-                                </a>
-                                <div class="border_line"></div>
-                                <p>Account Details Here.</p>
+                <a href="#account" onclick="document.getElementById('courses').style.display='none';document.getElementById('account').style.display='block';">
+                    <div class="col-lg-4">
+                        <div class="categories_post">
+                            <img src="{% static 'img/blog/cat-post/cat-post-1.jpg' %}" alt="post">
+                            <div class="categories_details">
+                                <div class="categories_text">
+                                    <a href="#account" onclick="document.getElementById('courses').style.display='none';document.getElementById('account').style.display='block';">
+                                        <h5>My Account</h5>
+                                    </a>
+                                    <div class="border_line"></div>
+                                    <p>Account Details Here.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -187,21 +187,24 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="blog_left_sidebar">  
-                      <div id="courses" style="display:none">
+                      <div id="courses" style="">
                         <h1>My Courses</h1>
                         <div>
                             <table class="w3-table-all">
                                 <tr class="w3-black">
-                                    <th>Course ID</th>
-                                    <th>Cousre Name</th>
-                                    <th>Details</th>
-                                    <th>Open Lectures</th>
+                                    <th style="text-align:center;">Cousre Name</th>
+                                    <th style="text-align:center;">Progress</th>
+                                    <th style="text-align:center;">Lectures</th>
                                 </tr>
-                                <tr>
-                                    <td>GHTY56</td>
-                                    <td>Business</td>
-                                    <td><a style="border-radius:50px;"class="w3-button w3-red w3-hover-blue"href="">View</a></td>
-                                    <td><a style="border-radius:50px;"class="w3-button w3-red w3-hover-blue"href="">Open</a></td>
+                                <tr style="">
+                                    <td style="text-align:center;font-size:22px;">      <a href="">Business</a>
+                                    </td>
+                                    <td>
+                                        <div class="w3-light-blue" style="">
+                                            <div class="w3-container w3-blue w3-center" style="width:50%">50%</div>
+                                        </div>
+                                    </td>
+                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="">Open</a></td>
                                 </tr>
                             </table>
                         </div>
@@ -209,26 +212,43 @@
                       <div id="account" style="display:none">
                         <h1>My Account</h1>
                         <div>
-                            <form>
-                                <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">First Name</label>
-                                <input style="font-weight:bold;font-size:30px;"class="w3-input" name="first name" type="text" value="sonali" disabled>
-                                <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">Last Name</label>
-                                <input style="font-weight:bold;font-size:30px;"class="w3-input" name="last name" type="text" value="Kulshreshtha" disabled>
-                                <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">Email</label>
-                                <input style="font-weight:bold;font-size:30px;"class="w3-input" name="email" type="email" value="sonkul12@gmail.com"  disabled>
-                                <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">Phone</label>
-                                <input style="font-size:30px;font-weight:bold;"class="w3-input" name="phone" type="number" value="5678902345" disabled>
-                                <input style="margin-top:20px;border-radius:20px;"class="w3-button w3-blue w3-hover-black w3-large" type="submit" value="Save">
-                                <input style="margin-left:10px;margin-top:20px;border-radius:20px;"class="w3-button w3-blue w3-hover-black w3-large" type="reset" value="Edit">
-                                <a style="margin-left:10px;margin-top:20px;border-radius:20px;"class="w3-button w3-red w3-hover-black"href="">Change Password?</a>
-                            </form>
-                            <div>
-                                <form>
-                                   <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">New Password</label>
-                                <input class="w3-input" name="new password" placeholder="new password" type="password">
-                                <label style="color:blue;font-size:20px;margin-top:20px;font-weight:bold;">Old Password</label>
-                                <input class="w3-input" name="old password" placeholder="old password" type="password">
-                                <input style="margin-left:10px;margin-top:20px;border-radius:20px;"class="w3-button w3-blue w3-hover-black w3-large" type="submit" value="Save"> 
+                            <form class="row contact_form" action="/checklogin/" method="POST">
+                                <div style="width:100%;"class="form-group">
+                                    <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">First Name</label>
+                                    <input style="font-weight:bold;font-size:25px;"class="form-control" name="first name" id="fname" type="text" value="sonali" disabled>
+                                </div>
+                                <div style="width:100%;"class="form-group">
+                                    <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Last Name</label>
+                                    <input style="font-weight:bold;font-size:25px;" name="last name" id="lname" type="text" value="Kulshreshtha" disabled class="form-control">
+                                </div>
+                                <div style="width:100%;"class="form-group">
+                                    <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Email</label>
+                                    <input style="font-weight:bold;font-size:25px;" name="email" id="email" type="email" value="sonkul12@gmail.com" disabled class="form-control">
+                                </div>
+                                <div style="width:100%;"class="form-group">
+                                    <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Phone</label>
+                                    <input style="font-size:25px;font-weight:bold;" name="phone" id="phone" type="number" value="5678902345" disabled class="form-control">
+                                </div>
+                            
+                                <div style="width:100%;"class="form-group">
+                                    <input style="display:none;" class="btn primary-btn" id="submit" type="submit" value="Save">
+                                    
+                                    <input class="btn primary-btn" type="reset" id="edit" onclick="enableinputs()" value="Edit">
+                                    <a href="#password" class="btn primary-btn" style="margin-left:10px;" onclick="document.getElementById('password').style.display='block';">Change Password</a>
+                                </div>
+                        </form>
+                            <div id="password" style="display:none;padding-top:50px;">
+                                <form class="row contact_form" action="/checklogin/" method="POST">
+                                    <div style="width:100%;"class="form-group">
+                                        <input type="password" class="form-control" name="email"  rows="1" placeholder="Old Password">
+                                    </div>
+                                    <div style="width:100%;"class="form-group">
+                                        <input type="password" style="margin-bottom:10px;"class="form-control" name="password" placeholder="New Password">
+                                    </div>
+                                
+                                    <div style="width:100%;"class="form-group">
+                                        <button style="width:100%;"type="submit" value="submit" class="btn primary-btn">Save</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -487,6 +507,15 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
     <script src="{% static 'js/gmaps.min.js' %}"></script>
     <script src="{% static 'js/theme.js' %}"></script>
+    <script type="text/javascript">
+        function enableinputs() {
+          document.getElementById('fname').disabled = false;
+          document.getElementById('lname').disabled = false;
+          document.getElementById('phone').disabled = false;
+          document.getElementById('submit').style.display = 'block';
+          document.getElementById('edit').style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>
