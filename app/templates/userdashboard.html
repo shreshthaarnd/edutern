@@ -42,9 +42,11 @@
                             </span>
                         </a>
                     </div>
+                    {% if check_user %}
                     <div class="col-lg-6 col-sm-6 col-8 header-top-right">
                         <a href="#" class="text-uppercase">Login</a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -73,31 +75,11 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about-us.html">About</a></li>
-                            <li class="nav-item submenu dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">Pages</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="courses.html">Courses</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="course-details.html">Course Details</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item submenu dropdown active">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">Blog</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link search" id="search">
-                                    <i class="lnr lnr-magnifier"></i>
-                                </a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/courses/">Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#courses" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">My Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#account" onclick="document.getElementById('courses').style.display='none';document.getElementById('account').style.display='block';">My Account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/courses/">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -212,22 +194,25 @@
                       <div id="account" style="display:none">
                         <h1>My Account</h1>
                         <div>
-                            <form class="row contact_form" action="/checklogin/" method="POST">
+                           
+                            <form class="row contact_form" action="/editUserDetail/" method="POST">
+                                {% csrf_token %}
+                                {% for data in data %}
                                 <div style="width:100%;"class="form-group">
                                     <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">First Name</label>
-                                    <input style="font-weight:bold;font-size:25px;"class="form-control" name="first name" id="fname" type="text" value="sonali" disabled>
+                                    <input style="font-weight:bold;font-size:25px;"class="form-control" name="first_name" id="fname" type="text" value="{{data.User_FName}}" disabled>
                                 </div>
                                 <div style="width:100%;"class="form-group">
                                     <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Last Name</label>
-                                    <input style="font-weight:bold;font-size:25px;" name="last name" id="lname" type="text" value="Kulshreshtha" disabled class="form-control">
+                                    <input style="font-weight:bold;font-size:25px;" name="last_name" id="lname" type="text" value="{{data.User_LName}}" disabled class="form-control">
                                 </div>
                                 <div style="width:100%;"class="form-group">
                                     <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Email</label>
-                                    <input style="font-weight:bold;font-size:25px;" name="email" id="email" type="email" value="sonkul12@gmail.com" disabled class="form-control">
+                                    <input style="font-weight:bold;font-size:25px;" name="email" id="email" type="email" value="{{data.User_Email}}" disabled class="form-control">
                                 </div>
                                 <div style="width:100%;"class="form-group">
                                     <label style="color:blue;font-size:18px;margin-top:20px;font-weight:bold;">Phone</label>
-                                    <input style="font-size:25px;font-weight:bold;" name="phone" id="phone" type="number" value="5678902345" disabled class="form-control">
+                                    <input style="font-size:25px;font-weight:bold;" name="phone" id="phone" type="number" value="{{data.User_Phone}}" disabled class="form-control">
                                 </div>
                             
                                 <div style="width:100%;"class="form-group">
@@ -236,14 +221,17 @@
                                     <input class="btn primary-btn" type="reset" id="edit" onclick="enableinputs()" value="Edit">
                                     <a href="#password" class="btn primary-btn" style="margin-left:10px;" onclick="document.getElementById('password').style.display='block';">Change Password</a>
                                 </div>
-                        </form>
+                                {% endfor %}
+                            </form>
+                        
                             <div id="password" style="display:none;padding-top:50px;">
-                                <form class="row contact_form" action="/checklogin/" method="POST">
+                                <form class="row contact_form" action="/editPassword/" method="POST">
+                                    {% csrf_token %}
                                     <div style="width:100%;"class="form-group">
-                                        <input type="password" class="form-control" name="email"  rows="1" placeholder="Old Password">
+                                        <input type="password" class="form-control" name="old_password"  rows="1" placeholder="Old Password">
                                     </div>
                                     <div style="width:100%;"class="form-group">
-                                        <input type="password" style="margin-bottom:10px;"class="form-control" name="password" placeholder="New Password">
+                                        <input type="password" style="margin-bottom:10px;"class="form-control" name="new_password" placeholder="New Password">
                                     </div>
                                 
                                     <div style="width:100%;"class="form-group">
