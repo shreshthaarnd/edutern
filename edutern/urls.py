@@ -21,6 +21,9 @@ urlpatterns = [
     path('userdashboard/',userdashboard),
     path('courseplayer/',courseplayer),
     path('accounts/', include('allauth.urls')),
+    path('socialreg/', socialreg),
+    path('socialsave/', socialsave),
+    path('logout/', logout),
 
     path('adminindex/',adminindex),
     path('adminlogin/',adminlogin),

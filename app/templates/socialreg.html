@@ -1,0 +1,68 @@
+<!doctype html>
+{% load static %}
+{% load socialaccount %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
+    <title>Edutern - Registration</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/owl-carousel/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/lightbox/simpleLightbox.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/nice-select/css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'vendors/animate-css/animate.css' %}">
+    <!-- main css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'w3.css' %}">
+</head>
+
+<body>
+{% if user.is_authenticated %}
+<div id="id01" style="background-color:white;display:block;" class="w3-modal w3-animate-zoom text-center">
+      <img style="width:100px;" src="{% static 'loading.gif' %}">
+      <h3>Processing Registration</h3>
+      <h2 style="font-weight:bold;">Please Wait....</h2>
+      <h5 style="color:red;">Do not press 'BACK' or 'REFRESH'</h5>
+      <img style="width:300px;" src="{% static 'img/EDUTERN LOGO BY SUMMI CREATIONS.png' %}">
+      <form method="POST" action="/socialsave/" name="f1">
+        <input name="username" type="hidden" value="{{ user.username }}">
+        <input name="email" type="hidden" value="{{ user.email }}">
+        <script type="text/javascript">
+          document.f1.submit();
+        </script>
+      </form>
+</div>
+{% else %}
+<div id="id01" style="background-color:white;display:block;" class="w3-modal w3-animate-zoom text-center">
+      <h3>Error : User Unauthorized</h3>
+      <a href="/index/">
+        <h2 style="font-weight:bold;color:red;">Back to Home</h2>
+        <img style="width:300px;" src="{% static 'img/EDUTERN LOGO BY SUMMI CREATIONS.png' %}">
+      </a>
+</div>
+{% endif %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/stellar.js' %}"></script>
+    <script src="{% static 'vendors/nice-select/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'vendors/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/owl-carousel-thumb.min.js' %}"></script>
+    <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'vendors/counter-up/jquery.counterup.js' %}"></script>
+    <script src="{% static 'js/mail-script.js' %}"></script>
+    <!--gmaps Js-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+    <script src="{% static 'js/gmaps.min.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+
+</html>

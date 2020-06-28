@@ -12,8 +12,18 @@ from datetime import date
 from .myutil import *
 
 # Create your views here.
+def logout(request):
+	try:
+		del request.session['userid']
+		request.session.flush()
+		return redirect('/index/')
+	except:
+		return redirect('/index/')
+def socialreg(request):
+	return render(request,'socialreg.html',{})
 def index(request):
-	return render(request,'index.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'index.html',dic)
 def aboutus(request):
 	return render(request,'about-us.html',{})
 def blog(request):
@@ -36,6 +46,32 @@ def login(request):
 	return render(request,'login.html',{})
 def registration(request):
 	return render(request,'registration.html',{})
+@csrf_exempt
+def socialsave(request):
+	if request.method=='POST':
+		username=request.POST.get('username')
+		email=request.POST.get('email')
+		u="U00"
+		x=1
+		uid=u+str(x)
+		while UserData.objects.filter(User_ID=uid).exists():
+			x=x+1
+			uid=u+str(x)
+		x=int(x)
+		obj=UserData(
+			User_ID=uid,
+			User_FName=username,
+			User_Email=email
+			)
+		if UserData.objects.filter(User_Email=email):
+			for x in UserData.objects.filter(User_Email=email):
+				request.session['userid'] = x.User_ID
+				break
+			return redirect('/userdashboard/')
+		else:
+			obj.save()
+			request.session['userid'] = uid
+			return redirect('/userdashboard/')
 @csrf_exempt
 def saveuser(request):
 	if request.method=='POST':

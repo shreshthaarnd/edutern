@@ -24,11 +24,11 @@ class LecturesData(models.Model):
 class UserData(models.Model):
 	Join_Date=models.CharField(max_length=50, default=date.today().strftime("%d/%m/%Y"))
 	User_ID=models.CharField(max_length=20, primary_key=True)
-	User_FName=models.CharField(max_length=50)
-	User_LName=models.CharField(max_length=50)
-	User_Email=models.CharField(max_length=70)
-	User_Phone=models.CharField(max_length=15)
-	User_Password=models.CharField(max_length=20)
+	User_FName=models.CharField(max_length=50, default='NA')
+	User_LName=models.CharField(max_length=50, default='NA')
+	User_Email=models.CharField(max_length=70, default='NA')
+	User_Phone=models.CharField(max_length=15, default='NA')
+	User_Password=models.CharField(max_length=20, default='NA')
 	Verify_Status=models.CharField(max_length=12, default='Unverified')
 	Status=models.CharField(max_length=10, default='Active')
 	class Meta:

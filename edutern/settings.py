@@ -126,7 +126,7 @@ EMAIL_HOST_PASSWORD='womipbpedpanajrc'
 EMAIL_PORT=587
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/userdashboard/'
+LOGIN_REDIRECT_URL = '/socialreg/'
 
 AUTHENTICATION_BACKENDS = (
  'django.contrib.auth.backends.ModelBackend',

@@ -139,8 +139,8 @@
                 <div class="column" style="padding:50px;background-color:black;width:500px;">
                     <h3 style="color:white;margin:auto;">Don't have a account?</h3>
                     <a href="/registration/" style="width:100%;margin-top:20px;" class="btn primary-btn">Register Here</a>
-                    <a href="{% provider_login_url 'google' %}" style="background-color:red;width:100%;margin-top:20px;" class="w3-button w3-red w3-hover-black">Register with <i class="fa fa-google"></i></a>
-                    <a href="/registration/" style="background-color:red;width:100%;margin-top:20px;" class="w3-button w3-blue w3-hover-black">Register with <i class="fa fa-facebook"></i></a>
+                    <a href="{% provider_login_url 'google' %}" style="background-color:red;width:100%;margin-top:20px;color:white;" class="btn df_color1">Login with <i class="fa fa-google"></i></a>
+                    <a href="{% provider_login_url 'facebook' %}" style="width:100%;margin-top:20px;color:white;background-color:blue;" class="btn df_color2">Login with <i class="fa fa-facebook"></i></a>
                 </div>
                 <div style="padding:50px;width:auto;"class="column">
                     <form class="row contact_form" action="/checklogin/" method="POST">
