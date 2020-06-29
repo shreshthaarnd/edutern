@@ -31,9 +31,20 @@ def blog(request):
 def contact(request):
 	return render(request,'contact.html',{})
 def coursedetails(request):
-	return render(request,'course-details.html',{})
+	course_id=request.GET.get('course_id')
+	if CourseData.objects.filter(Course_ID=course_id).exists():
+		course_data=CourseData.objects.filter(Course_ID=course_id)
+		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+
+		return render(request,'course-details.html',{'course_data':course_data,'lecture_data':lecture_data})
+	else:
+		return HttpResponse("<h1>Course not found")
 def courses(request):
-	return render(request,'courses.html',{})
+	if check_user:
+		course_data=CourseData.objects.all()
+		return render(request,'courses.html',{'course_data':course_data})
+	else:
+		return HttpResponse("<h1>Course not found")
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):
@@ -231,7 +242,15 @@ def userdashboard(request):
 		data=UserData.objects.filter(User_ID=uid).all()
 	return render(request,'userdashboard.html',{'data':data})
 def courseplayer(request):
-	return render(request,'courseplayer.html',{})
+	if check_user:
+		lecture_id=request.GET.get('lecture_id')
+		course_id=request.GET.get('course_id')
+		lecture_data=LecturesData.objects.filter(Lecture_ID=lecture_id)
+		lecture_list=LecturesData.objects.filter(Course_ID=course_id).all()
+		
+		return render(request,'courseplayer.html',{'lecture_data':lecture_data,'lecture_list':lecture_list})
+	else:
+		return HttpResponse("not allowed")
 def adminaddlectures(request):
 	try:
 		adminid=request.session['adminid']
