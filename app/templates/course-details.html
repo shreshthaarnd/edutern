@@ -198,8 +198,9 @@
                             </a>
                         </li>
                     </ul>
-                    <a href="#" class="primary-btn text-uppercase enroll">Enroll the course</a>
-
+                    {% if not status %}
+                    <a href="/checkout?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}" class="primary-btn text-uppercase enroll">Enroll the course</a>
+                    {% endif %}
                     <h4 class="title">Reviews</h4>
                     <div class="content">
                         <div class="review-top row pt-40">

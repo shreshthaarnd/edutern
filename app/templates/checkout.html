@@ -143,15 +143,14 @@
                             <img class="img-fluid w-100" src="{% static 'img/courses/trainer1.jpg' %}" alt="">
                             <div class="authr_meta">
                                 <img src="{% static 'img/author1.png' %}" alt="">
-                                <span>Mart Taylor</span>
+                                <span>{% for i in course_data %}{{i.Course_Trainer}}{% endfor %}</span>
                             </div>
                         </div>
                         <div class="course_content">
                             <h4>
-                                <a href="course-details.html">Learn React js beginners</a>
+                                <a href="course-details.html">{% for i in course_data %}{{i.Course_Name}}{% endfor %}</a>
                             </h4>
-                            <p>When television was young, there was a huge popular show based on the still popular fictional character of
-                                Superman.</p>
+                            <p>{% for i in course_data %}{{i.Course_Name}}{% endfor %}</p>
                             <div class="course_meta d-flex justify-content-between">
                                 <div>
                                     <span class="meta_info">
@@ -164,7 +163,7 @@
                                     </span>
                                 </div>
                                 <div>
-                                    <span class="price">$150</span>
+                                    <span class="price">{% for i in course_data %}{{i.Course_Fee}}{% endfor %}</span>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +180,8 @@
                             </td>
                         </tr>
                     </table>
-                    <form>
+                    <form method="post" action="/checkout/?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">
+                        {% csrf_token %}
                         <input style="width:100%;"type="Submit" class="btn primary-btn" value="Proceed to Pay">
                     </form>
                     <div style="padding:50px;display:none;" class="text-center">
