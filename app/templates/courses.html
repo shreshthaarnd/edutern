@@ -136,23 +136,13 @@
     <!--================ Start Popular Courses Area =================-->
     <div class="popular_courses lite_bg">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <div class="main_title">
-                        <h2>Popular Courses</h2>
-                        <p>There is a moment in the life of any aspiring astronomer that it is time to buy that first
-                            telescope. It’s
-                            exciting to think about setting up your own viewing station.</p>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <!-- single course -->
                 {% for course in data %}
                 <div class="col-lg-3 col-md-6">
                     <div class="single_course">
                         <div class="course_head overlay">
-                            <img class="img-fluid w-100" src="{% static 'img/courses/trainer1.jpg' %}" alt="">
+                            <img class="img-fluid w-100" src="{{ course.Course_Thumb.url|safe }}" alt="">
                             <div class="authr_meta">
                                 <img src="{% static 'img/author1.png' %}" alt="">
                                 <span>{{course.Course_Trainer}}</span>
@@ -162,7 +152,7 @@
                             <h4>
                                 <a href="/coursedetails/?course_id={{course.Course_ID}}">{{course.Course_Name}}</a>
                             </h4>
-                            <p>{{course.Course_Content}}</p>
+                            <p>{{course.Course_Objective}}</p>
                             <div class="course_meta d-flex justify-content-between">
                                 <div>
                                     <span class="meta_info">
@@ -175,7 +165,7 @@
                                     </span>
                                 </div>
                                 <div>
-                                    <span class="price">{{course.Course_Fee}}</span>
+                                    <span class="price df_color2"><i class="fa fa-inr"></i> {{course.Course_Fee}}</span>
                                 </div>
                             </div>
                         </div>

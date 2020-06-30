@@ -40,5 +40,4 @@ class UserData(models.Model):
 class UserCourses(models.Model):
 	UserID=models.ForeignKey(UserData,on_delete=models.CASCADE,null=True,blank=True)
 	Course_ID=models.CharField(max_length=20)
-	Course_Name=models.CharField(max_length=200)
 	status=models.BooleanField(default=False)
