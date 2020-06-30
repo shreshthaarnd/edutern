@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en">
 
 <head>
@@ -7,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
-    <title>Login</title>
+    <title>Edutern - Login</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}">
@@ -19,6 +20,7 @@
     <!-- main css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'w3.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -134,20 +136,20 @@
     <section class="contact_area section_gap">
         <div class="container">
             <div class="row">
-                <div class="column">
-                    <img style="width:400px;"src="{% static 'img/education-quote-awesome-wallpaper.jpg' %}">
+                <div class="column" style="padding:50px;background-color:black;width:500px;">
+                    <h3 style="color:white;margin:auto;">Don't have a account?</h3>
+                    <a href="/registration/" style="width:100%;margin-top:20px;" class="btn primary-btn">Register Here</a>
+                    <a href="{% provider_login_url 'google' %}" style="background-color:red;width:100%;margin-top:20px;color:white;" class="btn df_color1">Login with <i class="fa fa-google"></i></a>
+                    <a href="{% provider_login_url 'facebook' %}" style="width:100%;margin-top:20px;color:white;background-color:blue;" class="btn df_color2">Login with <i class="fa fa-facebook"></i></a>
                 </div>
-                <div style="padding:50px;width:700px;"class="column">
-                    <form class="row contact_form" action="contact_process.php" method="post" id="contactForm"
-                        novalidate="novalidate">
-                        
-                        
+                <div style="padding:50px;width:auto;"class="column">
+                    <form class="row contact_form" action="/checklogin/" method="POST">
                             <div style="width:100%;"class="form-group">
-                                <input class="form-control" name="Email"  rows="1" placeholder="Enter Email">
+                                <input type="text" class="form-control" name="email"  rows="1" placeholder="Enter Email">
                             </div>
                             <div style="width:100%;"class="form-group">
-                                <input style="margin-bottom:10px;"class="form-control" name="Password"  rows="1" placeholder="Enter Password">
-                                <a style="float:right;"href="">Forgot Password?</a>
+                                <input type="password" style="margin-bottom:10px;"class="form-control" name="password" placeholder="Enter Password">
+                                <a style="float:right;"href="/forget_password/">Forgot Password?</a>
                             </div>
                         
                         <div style="width:100%;"class="form-group">
