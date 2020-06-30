@@ -165,7 +165,7 @@
                                 {% for lecture in lecture_data %}
                                 <li class="justify-content-between d-flex">
                                     <p>{{lecture.Lecture_Name}}</p>
-                                    <a class="primary-btn text-uppercase" href="/courseplayer?lecture_id={{lecture.Lecture_ID}}&course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}/">View Details</a>
+                                    <a class="primary-btn text-uppercase" href="/courseplayer?lecture_id={{lecture.Lecture_ID}}&course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">View Details</a>
                                 </li>
                                 {% endfor %}
                                 
