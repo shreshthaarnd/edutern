@@ -40,28 +40,8 @@ def coursedetails(request):
 	else:
 		return HttpResponse("<h1>Course not found")
 def courses(request):
-	if check_user:
-		user_id=request.session['userid']
-		course_ids=[]
-		UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
-		course=UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
-		for i in course:
-			course_ids.append(i['Course_ID'])
-		course_data=[]
-		for i in course_ids:
-			a=CourseData.objects.filter(Course_ID=i)
-			course_data.append(a)
-		print(course_data)
-		data=[]
-		for i in course_data:
-			data.append(i[0])
-		print(data)
-
-		
-		return render(request,'courses.html',{'data':data})
-		
-	else:
-		return HttpResponse("<h1>Course not found")
+	data=CourseData.objects.all()
+	return render(request,'courses.html',{'data':data, 'checksession':check_user})
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):
@@ -247,7 +227,6 @@ def adminsavecourse(request):
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincourselist(request):
-
 	try:
 		adminid=request.session['adminid']
 		dic={'data':CourseData.objects.all()}

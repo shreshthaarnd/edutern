@@ -136,7 +136,9 @@
             <div class="row">
                 <div class="col-lg-8 course_details_left">
                     <div class="main_image">
-                        <img class="img-fluid" src="{% static 'img/courses/course-details.jpg' %}" alt="">
+                        <img class="img-fluid" src="{% for i in course_data %}
+                                {{i.Course_Thumb.url|safe}}
+                            {% endfor %}" alt="">
                     </div>
                     <div class="content_wrapper">
                         <h4 class="title">Objectives</h4>
@@ -193,18 +195,6 @@
                                 <span>{{i.Course_Fee}}</span>
                                 {% endfor %}
                                 
-                            </a>
-                        </li>
-                        <li>
-                            <a class="justify-content-between d-flex" href="#">
-                                <p>Available Seats </p>
-                                <span>15</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="justify-content-between d-flex" href="#">
-                                <p>Schedule </p>
-                                <span>2.00 pm to 4.00 pm</span>
                             </a>
                         </li>
                     </ul>
