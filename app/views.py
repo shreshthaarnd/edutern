@@ -41,8 +41,7 @@ def coursedetails(request):
 		return HttpResponse("<h1>Course not found")
 def courses(request):
 	data=CourseData.objects.all()
-	users=UserCourses.objects.all()
-	return render(request,'courses.html',{'data':data, 'users':users})
+	return render(request,'courses.html',{'data':data, 'checksession':check_user})
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):

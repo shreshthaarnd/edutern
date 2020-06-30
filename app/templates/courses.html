@@ -152,20 +152,20 @@
                             <h4>
                                 <a href="/coursedetails/?course_id={{course.Course_ID}}">{{course.Course_Name}}</a>
                             </h4>
-                            <p>{{course.Course_Objective}}</p>
+                            <p style="overflow: hidden;text-overflow: ellipsis;height:100px;">{{course.Course_Objective}}</p>
                             <div class="course_meta d-flex justify-content-between">
                                 <div>
                                     <span class="meta_info">
-                                        <a href="#"><i class="lnr lnr-user"></i>355</a>
+                                        <a href="/coursedetails/?course_id={{course.Course_ID}}"><i class="lnr lnr-user"></i>355</a>
                                     </span>
                                     <span class="meta_info">
-                                        <a href="#">
+                                        <a href="/coursedetails/?course_id={{course.Course_ID}}">
                                             <i class="lnr lnr-bubble"></i>35
                                         </a>
                                     </span>
                                 </div>
                                 <div>
-                                    <span class="price df_color2"><i class="fa fa-inr"></i> {{course.Course_Fee}}</span>
+                                    <a href="/coursedetails/?course_id={{course.Course_ID}}"><span class="price df_color2"><i class="fa fa-inr"></i> {{course.Course_Fee}}</span></a>
                                 </div>
                             </div>
                         </div>
