@@ -113,7 +113,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="banner_content text-center">
-                            <h2>Courses</h2>
+                            <h2>{% for course in course_data %}{{course.Course_Name}}{% endfor %}</h2>
                             <p>In the history of modern astronomy, there is probably no one greater leap forward than
                                 the
                                 building and launch of the space telescope known as the Hubble.</p>
