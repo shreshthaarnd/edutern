@@ -13,6 +13,7 @@ class CourseData(models.Model):
 	class Meta:
 		db_table="CourseData"
 
+
 class LecturesData(models.Model):
 	Lecture_ID=models.CharField(max_length=20, primary_key=True)
 	Course_ID=models.CharField(max_length=20)
@@ -33,3 +34,11 @@ class UserData(models.Model):
 	Status=models.CharField(max_length=10, default='Active')
 	class Meta:
 		db_table="UserData"
+	def __str__(self):
+		return str(self.User_ID)
+
+class UserCourses(models.Model):
+	UserID=models.ForeignKey(UserData,on_delete=models.CASCADE,null=True,blank=True)
+	Course_ID=models.CharField(max_length=20)
+	Course_Name=models.CharField(max_length=200)
+	status=models.BooleanField(default=False)
