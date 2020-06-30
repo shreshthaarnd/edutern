@@ -29,6 +29,9 @@ urlpatterns = [
     path('adminuserslist/',adminuserslist),
     path('adminactiveusers/',adminactiveusers),
     path('admindeactiveusers/',admindeactiveusers),
+    path('admincourseenrolls/',admincourseenrolls),
+    path('admincoursespayment/',admincoursespayment),
+    path('adminuserreview/',adminuserreview),
     
     path('login/',login),
     path('registration/',registration),

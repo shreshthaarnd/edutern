@@ -116,3 +116,9 @@ def adminactiveusers(request):
 	return render(request,'adminpages/activeusers.html',{})
 def admindeactiveusers(request):
 	return render(request,'adminpages/deactiveusers.html',{})
+def admincourseenrolls(request):
+	return render(request,'adminpages/courseenrolls.html',{})
+def admincoursespayment(request):
+	return render(request,'adminpages/coursespayment.html',{})
+def adminuserreview(request):
+	return render(request,'adminpages/userreview.html',{})
