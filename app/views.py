@@ -357,3 +357,7 @@ def editPassword(request):
 def checkout(request):
 	return render(request,'checkout.html',{})
 
+def admincompletecourses(request):
+	return render(request,'adminpages/completecourses.html',{})
+def adminincompletecourses(request):
+	return render(request,'adminpages/incompletecourses.html',{})

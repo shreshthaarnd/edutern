@@ -41,6 +41,8 @@ urlpatterns = [
     path('admincourseenrolls/',admincourseenrolls),
     path('admincoursespayment/',admincoursespayment),
     path('adminuserreview/',adminuserreview),
+    path('admincompletecourses/',admincompletecourses),
+    path('adminincompletecourses/',adminincompletecourses),
     
     path('login/',login),
     path('registration/',registration),
