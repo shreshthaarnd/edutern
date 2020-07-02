@@ -16,3 +16,20 @@ def check_user(request):
         return True
     except:
         return False
+def get_user_courses(request):
+    user_id=request.session['userid']
+    course_ids=[]
+    UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
+    course=UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
+    for i in course:
+        course_ids.append(i['Course_ID'])
+    course_data=[]
+    for i in course_ids:
+        a=CourseData.objects.filter(Course_ID=i)
+        course_data.append(a)
+    #print(course_data)
+    data=[]
+    for i in course_data:
+        data.append(i[0])
+    return data
+	

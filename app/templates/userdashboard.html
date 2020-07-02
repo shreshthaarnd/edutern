@@ -77,7 +77,7 @@
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/courses/">Courses</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#courses" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">My Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/courses/" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">My Courses</a></li>
                             <li class="nav-item"><a class="nav-link" href="#account" onclick="document.getElementById('courses').style.display='none';document.getElementById('account').style.display='block';">My Account</a></li>
                             <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
                         </ul>
@@ -112,13 +112,13 @@
     <section class="blog_categorie_area">
         <div class="container">
             <div class="row">
-                <a href="/courses/" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
+                <a href="/mycourses/" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
                     <div class="col-lg-4">
                         <div class="categories_post">
                             <img src="{% static 'img/blog/cat-post/cat-post-3.jpg' %}" alt="post">
                             <div class="categories_details">
                                 <div class="categories_text">
-                                    <a href="/courses/" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
+                                    <a href="/mycourses/" onclick="document.getElementById('courses').style.display='block';document.getElementById('account').style.display='none';">
                                         <h5>My Courses</h5>
                                     </a>
                                     <div class="border_line"></div>
@@ -133,7 +133,7 @@
                         <img src="{% static 'img/blog/cat-post/cat-post-2.jpg' %}" alt="post">
                         <div class="categories_details">
                             <div class="categories_text">
-                                <a href="blog-details.html">
+                                <a href="/courses/">
                                     <h5>All Courses</h5>
                                 </a>
                                 <div class="border_line"></div>
@@ -171,25 +171,36 @@
                     <div class="blog_left_sidebar">  
                       <div id="courses" style="">
                         <h1>My Courses</h1>
+                        {% for i in my_courses %}
+                        <br>
                         <div>
+                            
                             <table class="w3-table-all">
                                 <tr class="w3-black">
                                     <th style="text-align:center;">Cousre Name</th>
                                     <th style="text-align:center;">Progress</th>
                                     <th style="text-align:center;">Lectures</th>
+                                    <th style="text-align:center;">View</th>
                                 </tr>
                                 <tr style="">
-                                    <td style="text-align:center;font-size:22px;">      <a href="">Business</a>
+                                    <td style="text-align:center;font-size:22px;">      <a href="">{{i.Course_Name}}</a>
                                     </td>
                                     <td>
                                         <div class="w3-light-blue" style="">
                                             <div class="w3-container w3-blue w3-center" style="width:50%">50%</div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="">Open</a></td>
+                                    {% for n,m in lecture_id.items %}
+                                        {% ifequal n i.Course_ID %}
+                                        <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="/courseplayer/?course_id={{i.Course_ID}}&lecture_id={{m}}">Open</a></td>
+                                        {% endifequal %}
+                                    {% endfor %}
+                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="/coursedetails/?course_id={{i.Course_ID}}">View</a></td>
                                 </tr>
                             </table>
+                           
                         </div>
+                        {% endfor %}
                       </div>
                       <div id="account" style="display:none">
                         <h1>My Account</h1>

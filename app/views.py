@@ -32,16 +32,44 @@ def contact(request):
 	return render(request,'contact.html',{})
 def coursedetails(request):
 	course_id=request.GET.get('course_id')
+	user_id=request.session['userid']
+	dic={'checksession':check_user(request)}
 	if CourseData.objects.filter(Course_ID=course_id).exists():
 		course_data=CourseData.objects.filter(Course_ID=course_id)
 		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
-
-		return render(request,'course-details.html',{'course_data':course_data,'lecture_data':lecture_data})
+		if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
+			#status=UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).values('status')[0]['status']
+			status=True
+		else:
+			status=False
+			
+		return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status})
 	else:
 		return HttpResponse("<h1>Course not found")
 def courses(request):
 	data=CourseData.objects.all()
+	dic={'checksession':check_user(request)}
 	return render(request,'courses.html',{'data':data, 'checksession':check_user})
+def mycourses(request):
+	'''user_id=request.session['userid']
+	course_ids=[]
+	UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
+	course=UserCourses.objects.filter(UserID=user_id).values('Course_ID').all()
+	for i in course:
+		course_ids.append(i['Course_ID'])
+	course_data=[]
+	for i in course_ids:
+		a=CourseData.objects.filter(Course_ID=i)
+		course_data.append(a)
+	print(course_data)
+	data=[]
+	for i in course_data:
+		data.append(i[0])
+	print(data)'''
+	data=get_user_courses(request)
+	return render(request,'courses.html',{'data':data,'checksession':check_user(request)})
+
+
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):
@@ -237,7 +265,19 @@ def userdashboard(request):
 	if check_user:
 		uid=request.session['userid']
 		data=UserData.objects.filter(User_ID=uid).all()
-	return render(request,'userdashboard.html',{'data':data})
+		my_courses=get_user_courses(request)
+		course_id=[]
+		lecture_id={}
+		for i in my_courses:
+			course_id.append(i.Course_ID)
+		for i in course_id:
+			lec_id=LecturesData.objects.filter(Course_ID=i).values('Lecture_ID')[0]['Lecture_ID']
+			lecture_id[i]=lec_id
+		print(lecture_id)
+
+
+
+	return render(request,'userdashboard.html',{'data':data,'my_courses':my_courses,'lecture_id':lecture_id})
 def courseplayer(request):
 	uid=request.session['userid']
 	lecture_id=request.GET.get('lecture_id')
@@ -355,7 +395,21 @@ def editPassword(request):
 		else:
 			return HttpResponse("<script>alert('Pleasr check your old password'); window.location.replace('/userdashboard/')</script>")
 def checkout(request):
-	return render(request,'checkout.html',{})
+	if request.method=='POST':
+		course_id=request.GET.get('course_id')
+		user_id=request.session['userid']
+		#userid=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
+		print(user_id)
+		#print(userid)
+		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
+		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
+		usercourse.save()
+		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/userdashboard/')</script>")
+
+	else:
+		course_id=request.GET.get('course_id')
+		course_data=CourseData.objects.filter(Course_ID=course_id)
+		return render(request,'checkout.html',{'course_data':course_data,'checksession':check_user(request)})
 
 def admincompletecourses(request):
 	return render(request,'adminpages/completecourses.html',{})
