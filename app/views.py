@@ -262,30 +262,30 @@ def admincourselist(request):
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def userdashboard(request):
-	if check_user:
-		uid=request.session['userid']
-		data=UserData.objects.filter(User_ID=uid).all()
-	return render(request,'userdashboard.html',{'data':data})
+	uid=request.session['userid']
+	data=UserData.objects.filter(User_ID=uid).all()
+	mycourse=UserCourses.objects.filter(UserID=uid)
+	course=CourseData.objects.all()
+	return render(request,'userdashboard.html',{'data':data,'courses':course,'my_courses':mycourse,})
 def courseplayer(request):
 	uid=request.session['userid']
-	lecture_id=request.GET.get('lecture_id')
 	course_id=request.GET.get('course_id')
-	print(uid)
-	print(course_id)
-	print(lecture_id)
-
-	'''print(uid)
-	#status=UserCourses.objects.filter(UserID=uid,Course_ID=course_id).values('status')[0]['status']
-	#print(status)'''
 	if UserCourses.objects.filter(UserID=uid,Course_ID=course_id,status=True).exists():
-		lecture_data=LecturesData.objects.filter(Lecture_ID=lecture_id)
-		lecture_list=LecturesData.objects.filter(Course_ID=course_id).all()
-		return render(request,'courseplayer.html',{'lecture_data':lecture_data,'lecture_list':lecture_list})
+		lecture_data=LecturesData.objects.filter(Course_ID=course_id)
+		course=CourseData.objects.filter(Course_ID=course_id)
+		lecture_id=''
+		for x in lecture_data:
+			lecture_id=x.Lecture_ID
+			break
+		return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data})
 	else:
-		return HttpResponse("<script>alert('Please enroll into the course'); window.location.replace('/courses/')</script>")
-	
-	
-
+		return HttpResponse("<script>alert('Please enroll into the course'); window.location.replace('/userdashboard/')</script>")
+def openlecture(request):
+	lecture_id=request.GET.get('lecture')
+	course_id=request.GET.get('course')
+	lecture_data=LecturesData.objects.filter(Course_ID=course_id)
+	course=CourseData.objects.filter(Course_ID=course_id)
+	return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data})
 def adminaddlectures(request):
 	try:
 		adminid=request.session['adminid']
@@ -392,7 +392,7 @@ def checkout(request):
 		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
 		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
 		usercourse.save()
-		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/courses/')</script>")
+		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/userdashboard/')</script>")
 
 	else:
 		course_id=request.GET.get('course_id')

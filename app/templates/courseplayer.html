@@ -115,10 +115,10 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="banner_content text-center">
-                            <h2>{% for lecture in lecture_data %}{{lecture.Lecture_Name}}{% endfor %}</h2>
-                            <p>In the history of modern astronomy, there is probably no one greater leap forward than
-                                the
-                                building and launch of the space telescope known as the Hubble.</p>
+                            {% for x in course_data %}
+                            <h2>{{x.Course_Name}}</h2>
+                            <p>{{x.Course_Objective|slice:":100"}}</p>
+                            {% endfor %}
                             <div class="page_link">
                                 <a href="index.html">Home</a>
                                 <a href="contact.html">Course Name</a>
@@ -134,24 +134,26 @@
     <!--================Contact Area =================-->
     <section class="contact_area section_gap">
         <div class="container">
+            {% for i in lecture_data %}
+            {% if i.Lecture_ID == lecture_id %}
+            <h1 style="margin:10px;">Lecture : {{ i.Lecture_Name|safe }}</h1>
             <div class="row">
                 <video controls style="width:100%;">
-                    {% for i in lecture_data %}
-                    <source src="{{i.Lecture_Video}}" type="video/mp4">
-                    {% endfor %}
+                    <source src="{{ i.Lecture_Video.url|safe }}" type="video/mp4">
                 </video>
             </div>
+            {% endif %}
+            {% endfor %}
             <div class="row" style="margin-top:30px;">
-                <div style="padding:20px;margin:auto;"class="column">
+                <div style="padding:20px;margin:auto;width:700px;"class="column">
                 <h2>Play List</h2>
-                
-                
-                <table class="w3-table-all w3-hoverable" style="font-size:20px;">
-                   {% for i in lecture_list %}
-                    <tr>
-                        <td style="padding-top:35px;"><span style="padding:10px;padding-top:10px;"class="w3-green">Completed <i class="fa fa-check"></i></span></td>
+                <table class="w3-table-all w3-hoverable" style="width:100%;font-size:20px;">
+                   {% for i in lecture_data %}
+                    <tr class="w3-black">
+                        <td style="padding-top:35px;"><span style="padding:10px;border-radius:10px;"class="w3-green"><i class="fa fa-check"></i></span></td>
                         <td><img style="width:100px;"src="{% static 'img/event1.jpg' %}"></td>
-                        <td style="padding-top:35px;font-weight:bold;font-size:28px;">Lecture1 {{ i.Lecture_Name|safe }}</td>
+                        <td style="padding-top:35px;font-weight:bold;">{{ i.Lecture_Name|safe }}</td>
+                        <td style="padding-top:20px;"><a href="/openlecture/?course={{ i.Course_ID|safe }}&lecture={{ i.Lecture_ID|safe }}" style="border-radius:10px;margin:10px;" class="w3-button w3-blue w3-hover-white">View</a></td>
                     </tr>
                     {% endfor %}
 

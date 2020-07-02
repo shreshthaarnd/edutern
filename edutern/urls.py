@@ -20,6 +20,7 @@ urlpatterns = [
     path('checklogin/',checklogin),
     path('userdashboard/',userdashboard),
     path('courseplayer/',courseplayer),
+    path('openlecture/',openlecture),
     path('accounts/', include('allauth.urls')),
     path('socialreg/', socialreg),
     path('socialsave/', socialsave),

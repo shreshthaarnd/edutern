@@ -171,25 +171,37 @@
                     <div class="blog_left_sidebar">  
                       <div id="courses" style="">
                         <h1>My Courses</h1>
+                        <br>
                         <div>
+                            
                             <table class="w3-table-all">
                                 <tr class="w3-black">
                                     <th style="text-align:center;">Cousre Name</th>
                                     <th style="text-align:center;">Progress</th>
                                     <th style="text-align:center;">Lectures</th>
+                                    <th style="text-align:center;">View</th>
                                 </tr>
+                                {% for x in my_courses %}
+                                {% for y in courses %}
+                                {% if x.Course_ID == y.Course_ID %}
                                 <tr style="">
-                                    <td style="text-align:center;font-size:22px;">      <a href="">Business</a>
+                                    <td style="text-align:center;font-size:22px;">      <a href="">{{y.Course_Name}}</a>
                                     </td>
                                     <td>
                                         <div class="w3-light-blue" style="">
                                             <div class="w3-container w3-blue w3-center" style="width:50%">50%</div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="">Open</a></td>
+                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="/courseplayer/?course_id={{x.Course_ID}}">Open</a></td>
+                                    <td style="text-align:center;"><a style="border-radius:10px;"class="w3-button w3-red w3-hover-blue"href="/coursedetails/?course_id={{x.Course_ID}}">View</a></td>
                                 </tr>
+                                {% endif %}
+                                {% endfor %}
+                                {% endfor %}
                             </table>
+                           
                         </div>
+                        
                       </div>
                       <div id="account" style="display:none">
                         <h1>My Account</h1>
