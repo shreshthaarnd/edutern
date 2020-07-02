@@ -265,7 +265,19 @@ def userdashboard(request):
 	if check_user:
 		uid=request.session['userid']
 		data=UserData.objects.filter(User_ID=uid).all()
-	return render(request,'userdashboard.html',{'data':data})
+		my_courses=get_user_courses(request)
+		course_id=[]
+		lecture_id={}
+		for i in my_courses:
+			course_id.append(i.Course_ID)
+		for i in course_id:
+			lec_id=LecturesData.objects.filter(Course_ID=i).values('Lecture_ID')[0]['Lecture_ID']
+			lecture_id[i]=lec_id
+		print(lecture_id)
+
+
+
+	return render(request,'userdashboard.html',{'data':data,'my_courses':my_courses,'lecture_id':lecture_id})
 def courseplayer(request):
 	uid=request.session['userid']
 	lecture_id=request.GET.get('lecture_id')
@@ -392,7 +404,7 @@ def checkout(request):
 		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
 		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
 		usercourse.save()
-		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/courses/')</script>")
+		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/userdashboard/')</script>")
 
 	else:
 		course_id=request.GET.get('course_id')
