@@ -37,19 +37,45 @@ def coursedetails(request):
 	if CourseData.objects.filter(Course_ID=course_id).exists():
 		course_data=CourseData.objects.filter(Course_ID=course_id)
 		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+		status,review_status=False,False
 		if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
 			#status=UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).values('status')[0]['status']
 			status=True
-		else:
-			status=False
 			
-		return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status})
+			if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
+				review_status=True
+		
+		
+
+		
+			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
+
+		
+		
+		
+		
+		
 	else:
 		return HttpResponse("<h1>Course not found")
 def courses(request):
 	data=CourseData.objects.all()
 	dic={'checksession':check_user(request)}
-	return render(request,'courses.html',{'data':data, 'checksession':check_user})
+	sum=0
+	course_rating={}
+	for i in data:
+		sum=0
+		if UserReviews.objects.filter(Course_ID=i.Course_ID).exists():
+			rating=UserReviews.objects.filter(Course_ID=i.Course_ID).all()
+			for j in rating:
+				sum=sum+int(j.Review)
+			count=UserReviews.objects.filter(Course_ID=i.Course_ID).count()
+			average_rating=sum/count
+		else:
+			average_rating=5
+		course_rating[i.Course_ID]=average_rating
+	print(course_rating)
+	return render(request,'courses.html',{'data':data, 'checksession':check_user,'course_rating':course_rating})
 def mycourses(request):
 	'''user_id=request.session['userid']
 	course_ids=[]
@@ -339,23 +365,28 @@ def adminuserreview(request):
 
 def forget_password(request):
 	if request.method=='POST':
-		uid=request.session['userid']
 		password=''
-		data=UserData.objects.filter(User_ID=uid)
-		for x in data:
-			password=x.User_Password
-		sub='Edutern - Your Account Password'
 		email=request.POST['email']
-		msg='''Hi there!
-Your Edutern Account Password is,
+		if UserData.objects.filter(User_Email=email).exists():
 
-'''+password+'''
+			data=UserData.objects.filter(User_Email=email)
+			for x in data:
+				password=x.User_Password
+			sub='Edutern - Your Account Password'
+			
+			msg='''Hi there!
+	Your Edutern Account Password is,
 
-Thanks for creating your account on Edutern,
-Team Edutern'''
-		email=EmailMessage(sub,data,to=[email])
-		email.send()
-		return HttpResponse("<script>alert('Your Password has been send to your mail'); window.location.replace('/login/')</script>")
+	'''+password+'''
+
+	Thanks for creating your account on Edutern,
+	Team Edutern'''
+			email=EmailMessage(sub,data,to=[email])
+			email.send()
+			return HttpResponse("<script>alert('Your Password has been send to your mail'); window.location.replace('/login/')</script>")
+	
+		else:
+			return HttpResponse("<script>alert('Email does not exists'); window.location.replace('/login/')</script>")
 	else:
 		return render(request,'forgot_password.html',{})
 def editUserDetail(request):
@@ -403,3 +434,14 @@ def admincompletecourses(request):
 	return render(request,'adminpages/completecourses.html',{})
 def adminincompletecourses(request):
 	return render(request,'adminpages/incompletecourses.html',{})
+def reviewform(request):
+	if request.method=='POST':
+		userid=request.session['userid']
+		user_name=UserData.objects.filter(User_ID=userid).values('User_Name')[0]['User_Name']
+		review=request.POST['star']
+		feedback=request.POST['feedback']
+		Course_id=request.GET.get('course_id')
+		#if UserCourses(UserID=userid,Course_ID=Course_id).exists():
+		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
+		review_obj.save()
+		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")

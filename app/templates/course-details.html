@@ -240,15 +240,18 @@
                     {% if not status %}
                     <a href="/checkout?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}" class="primary-btn text-uppercase enroll">Enroll the course</a>
                     {% endif %}
+                    {% if review_status %}
                     <h4 class="title">Reviews</h4>
                     <div class="content">
                         <div class="review-top row pt-40">
                             
                         </div>
+                      
                         <div class="feedeback">
                             <h6>Your Feedback</h6>
-                            <form>
-                                <div style"font-size:20px;"=class="stars">
+                            <form method="post" action="/reviewform/?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">
+                                {% csrf_token %}
+                                <div style="font-size:20px;" class="stars">
                                                 <input class="star star-5" id="star-5" type="radio" name="star" value="5" required>
                                                 <label class="star star-5" for="star-5"></label>
                                                 <input class="star star-4" id="star-4" type="radio" name="star" value="4" required>
@@ -262,12 +265,15 @@
                                             </div>
                             <textarea name="feedback" class="form-control" cols="10" rows="10"></textarea>
                             <div class="mt-10 text-right">
-                                <a href="#" class="primary-btn text-right text-uppercase">Submit</a>
+                                <button class="primary-btn text-right text-uppercase">Submit</button>
                             </div>
                             </form>
                             
                         </div>
+                        {% endif %}
                         <div class="comments-area mb-30">
+                    
+                            {% for i in reviews %}
                             <div class="comment-list">
                                 <div class="single-comment single-reviews justify-content-between d-flex">
                                     <div class="user justify-content-between d-flex">
@@ -275,71 +281,53 @@
                                             <img src="{% static 'img/blog/c1.jpg' %}" alt="">
                                         </div>
                                         <div class="desc">
-                                            <h5><a href="#">Emilly Blunt</a>
+                                            <h5><a href="#">{{i.User_Name}}</a>
+
                                                 <div class="star">
+                                                    {% ifequal i.Review '1' %}
+                                                    <span class="fa fa-star checked"></span>
+                                                    {% endifequal %}
+                                                    {% ifequal i.Review '2' %}
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    {% endifequal %}
+                                                    {% ifequal i.Review '3' %}
                                                     <span class="fa fa-star checked"></span>
                                                     <span class="fa fa-star checked"></span>
                                                     <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star"></span>
-                                                    <span class="fa fa-star"></span>
+                                                    {% endifequal %}
+                                                    {% ifequal i.Review '4' %}
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    {% endifequal %}
+                                                    {% ifequal i.Review '5' %}
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    <span class="fa fa-star checked"></span>
+                                                    {% endifequal %}
                                                 </div>
                                             </h5>
                                             <p class="comment">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore.
+                                                {{i.Feedback}}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="comment-list">
-                                <div class="single-comment single-reviews justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="{% static 'img/blog/c2.jpg' %}" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <h5><a href="#">Elsie Cunningham</a>
-                                                <div class="star">
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star"></span>
-                                                    <span class="fa fa-star"></span>
-                                                </div>
-                                            </h5>
-                                            <p class="comment">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                            {% endfor %}
+                
+                            
+                            
                             </div>
-                            <div class="comment-list">
-                                <div class="single-comment single-reviews justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="{% static 'img/blog/c3.jpg' %}" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <h5><a href="#">Maria Luna</a>
-                                                <div class="star">
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star checked"></span>
-                                                    <span class="fa fa-star"></span>
-                                                    <span class="fa fa-star"></span>
-                                                </div>
-                                            </h5>
-                                            <p class="comment">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        
+                    
+                            
+                            
                         </div>
                     </div>
                 </div>

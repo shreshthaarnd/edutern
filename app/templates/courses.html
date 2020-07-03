@@ -160,7 +160,7 @@
                                     </span>
                                     <span class="meta_info">
                                         <a href="/coursedetails/?course_id={{course.Course_ID}}">
-                                            <i class="lnr lnr-bubble"></i>35
+                                            <i class="lnr lnr-bubble"></i>{% for n,m in course_rating.items %}{% ifequal n course.Course_ID %}{{m}}{% endifequal %}{% endfor %}
                                         </a>
                                     </span>
                                 </div>

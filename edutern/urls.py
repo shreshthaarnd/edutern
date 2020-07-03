@@ -52,6 +52,7 @@ urlpatterns = [
     path('editPassword/',editPassword),
     path('checkout/',checkout),
     path('mycourses/',mycourses),
+    path('reviewform/',reviewform),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
