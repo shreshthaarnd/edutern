@@ -160,7 +160,18 @@
                                     </span>
                                     <span class="meta_info">
                                         <a href="/coursedetails/?course_id={{course.Course_ID}}">
-                                            <i class="lnr lnr-bubble"></i>{% for n,m in course_rating.items %}{% ifequal n course.Course_ID %}{{m}}{% endifequal %}{% endfor %}
+                                            {% for n,m in course_rating.items %}
+                                            {% ifequal n course.Course_ID %}
+                                            {% if m >= 1.0  and m < 2.5 %}
+                                            <i class="lnr lnr-bubble" style="background-color: Red;">{{m}}</i>
+                                            {% elif m >= 2.5 and m < 3.5 %}
+                                            <i class="lnr lnr-bubble" style="background-color: yellow;">{{m}}</i>
+                                            {% else %}
+                                            <i class="lnr lnr-bubble" style="background-color: darkseagreen;">{{m}}</i>
+                                            {% endif %}
+                                            {% endifequal %}
+                                            {% endfor %}
+                                            
                                         </a>
                                     </span>
                                 </div>
