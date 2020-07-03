@@ -399,3 +399,7 @@ def checkout(request):
 		course_data=CourseData.objects.filter(Course_ID=course_id)
 		return render(request,'checkout.html',{'course_data':course_data,'checksession':check_user(request)})
 
+def admincompletecourses(request):
+	return render(request,'adminpages/completecourses.html',{})
+def adminincompletecourses(request):
+	return render(request,'adminpages/incompletecourses.html',{})
