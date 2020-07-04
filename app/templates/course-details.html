@@ -240,13 +240,13 @@
                     {% if not status %}
                     <a href="/checkout?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}" class="primary-btn text-uppercase enroll">Enroll the course</a>
                     {% endif %}
-                    {% if review_status %}
+                   
                     <h4 class="title">Reviews</h4>
                     <div class="content">
                         <div class="review-top row pt-40">
                             
                         </div>
-                      
+                        {% if review_status %}
                         <div class="feedeback">
                             <h6>Your Feedback</h6>
                             <form method="post" action="/reviewform/?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">

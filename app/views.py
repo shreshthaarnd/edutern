@@ -37,24 +37,23 @@ def coursedetails(request):
 	if CourseData.objects.filter(Course_ID=course_id).exists():
 		course_data=CourseData.objects.filter(Course_ID=course_id)
 		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
-		status,review_status=False,False
+		
+		reviews=UserReviews.objects.filter(Course_ID=course_id).all()
 		if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
 			#status=UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).values('status')[0]['status']
 			status=True
 			
 			if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
 				review_status=True
-		
-		
-
-		
-			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			else:
+				review_status=False
+			
 			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
-
 		
-		
-		
-		
+		else:
+			status=False
+			review_status=False
+			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
 		
 	else:
 		return HttpResponse("<h1>Course not found")
@@ -437,10 +436,13 @@ def adminincompletecourses(request):
 def reviewform(request):
 	if request.method=='POST':
 		userid=request.session['userid']
-		user_name=UserData.objects.filter(User_ID=userid).values('User_Name')[0]['User_Name']
+		user_fname=UserData.objects.filter(User_ID=userid).values('User_FName')[0]['User_FName']
+		user_lname=UserData.objects.filter(User_ID=userid).values('User_LName')[0]['User_LName']
 		review=request.POST['star']
 		feedback=request.POST['feedback']
 		Course_id=request.GET.get('course_id')
+		user_name=user_fname+" "+user_lname
+		print(user_name)
 		#if UserCourses(UserID=userid,Course_ID=Course_id).exists():
 		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
 		review_obj.save()
