@@ -206,7 +206,13 @@
                                 {% for lecture in lecture_data %}
                                 <li class="justify-content-between d-flex">
                                     <p>{{lecture.Lecture_Name}}</p>
+                                    {% if checksession == True %}
+                                    {% if status == True %}
                                     <a class="primary-btn text-uppercase" href="/courseplayer?lecture_id={{lecture.Lecture_ID}}&course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">View Details</a>
+                                    {% endif %}
+                                    {% else %}
+                                    <a class="primary-btn text-uppercase" href="/login/">View Details</a>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                                 
@@ -237,39 +243,42 @@
                             </a>
                         </li>
                     </ul>
+
+                    {% if checksession == True %}
                     {% if not status %}
                     <a href="/checkout?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}" class="primary-btn text-uppercase enroll">Enroll the course</a>
+                    {% endif %}
+                    {% else %}
+                    <a href="/login/" class="primary-btn text-uppercase enroll">Enroll the course</a>
                     {% endif %}
                    
                     <h4 class="title">Reviews</h4>
                     <div class="content">
-                        <div class="review-top row pt-40">
-                            
-                        </div>
+                        {% if checksession == True %}
                         {% if review_status %}
                         <div class="feedeback">
                             <h6>Your Feedback</h6>
                             <form method="post" action="/reviewform/?course_id={% for i in course_data %}{{i.Course_ID}}{% endfor %}">
                                 {% csrf_token %}
                                 <div style="font-size:20px;" class="stars">
-                                                <input class="star star-5" id="star-5" type="radio" name="star" value="5" required>
-                                                <label class="star star-5" for="star-5"></label>
-                                                <input class="star star-4" id="star-4" type="radio" name="star" value="4" required>
-                                                <label class="star star-4" for="star-4"></label>
-                                                <input class="star star-3" id="star-3" type="radio" name="star" value="3" required>
-                                                <label class="star star-3" for="star-3"></label>
-                                                <input class="star star-2" id="star-2" type="radio" name="star" value="2" required>
-                                                <label class="star star-2" for="star-2"></label>
-                                                <input class="star star-1" id="star-1" type="radio" name="star" value="1" required>
-                                                <label class="star star-1" for="star-1"></label>
-                                            </div>
-                            <textarea name="feedback" class="form-control" cols="10" rows="10"></textarea>
-                            <div class="mt-10 text-right">
-                                <button class="primary-btn text-right text-uppercase">Submit</button>
-                            </div>
+                                    <input class="star star-5" id="star-5" type="radio" name="star" value="5" required>
+                                    <label class="star star-5" for="star-5"></label>
+                                    <input class="star star-4" id="star-4" type="radio" name="star" value="4" required>
+                                    <label class="star star-4" for="star-4"></label>
+                                    <input class="star star-3" id="star-3" type="radio" name="star" value="3" required>
+                                    <label class="star star-3" for="star-3"></label>
+                                    <input class="star star-2" id="star-2" type="radio" name="star" value="2" required>
+                                    <label class="star star-2" for="star-2"></label>
+                                    <input class="star star-1" id="star-1" type="radio" name="star" value="1" required>
+                                    <label class="star star-1" for="star-1"></label>
+                                </div>
+                                <textarea name="feedback" class="form-control" cols="10" rows="10"></textarea>
+                                <div class="mt-10 text-right">
+                                    <button class="primary-btn text-right text-uppercase">Submit</button>
+                                </div>
                             </form>
-                            
                         </div>
+                        {% endif %}
                         {% endif %}
                         <div class="comments-area mb-30">
                     
@@ -320,14 +329,7 @@
                                 </div>
                             </div>
                             {% endfor %}
-                
-                            
-                            
                             </div>
-                        
-                    
-                            
-                            
                         </div>
                     </div>
                 </div>

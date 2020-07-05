@@ -31,32 +31,52 @@ def blog(request):
 def contact(request):
 	return render(request,'contact.html',{})
 def coursedetails(request):
-	course_id=request.GET.get('course_id')
-	user_id=request.session['userid']
-	dic={'checksession':check_user(request)}
-	if CourseData.objects.filter(Course_ID=course_id).exists():
-		course_data=CourseData.objects.filter(Course_ID=course_id)
-		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
-		
-		reviews=UserReviews.objects.filter(Course_ID=course_id).all()
-		if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
-			#status=UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).values('status')[0]['status']
-			status=True
-			
-			if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
-				review_status=True
+	try:
+		course_id=request.GET.get('course_id')
+		user_id=request.session['userid']
+		if CourseData.objects.filter(Course_ID=course_id).exists():
+			course_data=CourseData.objects.filter(Course_ID=course_id)
+			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
+				status=True
+				if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
+					review_status=True
+				else:
+					review_status=False
+				dic={'checksession':check_user(request),
+					'course_data':course_data,
+					'lecture_data':lecture_data,
+					'status':status,
+					'review_status':review_status,
+					'reviews':reviews}			
+				return render(request,'course-details.html',dic)		
 			else:
+				status=False
 				review_status=False
-			
-			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
-		
+				dic={'checksession':check_user(request),
+					'course_data':course_data,
+					'lecture_data':lecture_data,
+					'status':status,
+					'review_status':review_status,
+					'reviews':reviews}
+				return render(request,'course-details.html',dic)
 		else:
-			status=False
-			review_status=False
-			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
-		
-	else:
-		return HttpResponse("<h1>Course not found")
+			return HttpResponse("<h1>Course not found</h1>")
+	except:
+		course_id=request.GET.get('course_id')
+		if CourseData.objects.filter(Course_ID=course_id).exists():
+			course_data=CourseData.objects.filter(Course_ID=course_id)
+			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			dic={'checksession':check_user(request),
+				'course_data':course_data,
+				'lecture_data':lecture_data,
+				'reviews':reviews}
+			return render(request,'course-details.html',dic)
+		else:
+			return HttpResponse("<h1>Course not found</h1>")
+	
 def courses(request):
 	data=CourseData.objects.all()
 	dic={'checksession':check_user(request)}
