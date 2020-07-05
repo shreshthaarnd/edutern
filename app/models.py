@@ -49,3 +49,8 @@ class UserReviews(models.Model):
 		Feedback=models.TextField(max_length=200,blank=True,null=True)
 		def __str__(self):
 			return self.Review
+class UserLectures(models.Model):
+	User_ID=models.CharField(max_length=20,null=True,blank=True)
+	Course_ID=models.CharField(max_length=20,null=True,blank=True)
+	Lecture_ID=models.CharField(max_length=20,null=True,blank=True)
+	Lecture_Watched=models.BooleanField(default=False)

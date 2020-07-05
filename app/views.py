@@ -302,7 +302,16 @@ def courseplayer(request):
 		for x in lecture_data:
 			lecture_id=x.Lecture_ID
 			break
-		return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data})
+		if UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id,Lecture_ID=lecture_id,
+		Lecture_Watched=False).exists():
+			
+			userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id,Lecture_ID=lecture_id)
+			for i in userlec:
+				i.Lecture_Watched=True
+				i.save()
+		
+		Userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).all()
+		return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data,'userlec':Userlec})
 	else:
 		return HttpResponse("<script>alert('Please enroll into the course'); window.location.replace('/userdashboard/')</script>")
 def openlecture(request):
@@ -310,7 +319,14 @@ def openlecture(request):
 	course_id=request.GET.get('course')
 	lecture_data=LecturesData.objects.filter(Course_ID=course_id)
 	course=CourseData.objects.filter(Course_ID=course_id)
-	return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data})
+	if UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id,Lecture_ID=lecture_id,
+		Lecture_Watched=False).exists():
+		userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id,Lecture_ID=lecture_id)
+		for i in userlec:
+			i.Lecture_Watched=True
+			i.save()
+	Userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).all()
+	return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data,'userlec':Userlec})
 def adminaddlectures(request):
 	try:
 		adminid=request.session['adminid']
@@ -422,6 +438,11 @@ def checkout(request):
 		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
 		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
 		usercourse.save()
+		lectures=LecturesData.objects.filter(Course_ID=course_id).all()
+		if UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id,status=True).exists():
+			for i in lectures:
+				dt=UserLectures(User_ID=user_id,Course_ID=i.Course_ID,Lecture_ID=i.Lecture_ID,Lecture_Watched=False)
+				dt.save()
 		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/userdashboard/')</script>")
 
 	else:
@@ -447,3 +468,4 @@ def reviewform(request):
 		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
 		review_obj.save()
 		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
+

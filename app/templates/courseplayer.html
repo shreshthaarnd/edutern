@@ -138,9 +138,10 @@
             {% if i.Lecture_ID == lecture_id %}
             <h1 style="margin:10px;">Lecture : {{ i.Lecture_Name|safe }}</h1>
             <div class="row">
-                <video controls style="width:100%;">
+                <video style="width:100%;" controls autoplay onended="another()">
                     <source src="{{ i.Lecture_Video.url|safe }}" type="video/mp4">
                 </video>
+                <input type="hidden" value="{{ i.Lecture_ID }}" id="myvvv">
             </div>
             {% endif %}
             {% endfor %}
@@ -149,12 +150,26 @@
                 <h2>Play List</h2>
                 <table class="w3-table-all w3-hoverable" style="width:100%;font-size:20px;">
                    {% for i in lecture_data %}
+                   
                     <tr class="w3-black">
                         <td style="padding-top:35px;"><span style="padding:10px;border-radius:10px;"class="w3-green"><i class="fa fa-check"></i></span></td>
                         <td><img style="width:100px;"src="{% static 'img/event1.jpg' %}"></td>
                         <td style="padding-top:35px;font-weight:bold;">{{ i.Lecture_Name|safe }}</td>
                         <td style="padding-top:20px;"><a href="/openlecture/?course={{ i.Course_ID|safe }}&lecture={{ i.Lecture_ID|safe }}" style="border-radius:10px;margin:10px;" class="w3-button w3-blue w3-hover-white">View</a></td>
+                        
+                        {% for lec in userlec %}
+                        {% if i.Lecture_ID == lec.Lecture_ID %}
+                        {% if not lec.Lecture_Watched %}
+                        
+                        <input type="hidden" value="{{ i.Lecture_ID }}" id="newlec">
+                        <input type="hidden" value="{{ i.Course_ID }}" id="course">
+    
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    
                     </tr>
+                        
                     {% endfor %}
 
                     
@@ -347,6 +362,15 @@ var myChart = new Chart(ctx, {
       $(mp4Vid).attr('src', "video/video"+count+".mp4");
       player.load();
       player.play();
+   }
+   function another(){
+    var lecture=document.getElementById('myvvv').value;
+    var newlecture=document.getElementById('newlec').value;
+    var course=document.getElementById('course').value;
+   // alert('/openlecture/?course=%s&lecture=%s',+course,+newlecture);
+    window.location.replace(`/openlecture/?course=${course}&lecture=${newlecture}`);
+   
+    
    }
 
 </script>
