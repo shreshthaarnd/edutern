@@ -20,16 +20,20 @@ def logout(request):
 	except:
 		return redirect('/index/')
 def socialreg(request):
-	return render(request,'socialreg.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'socialreg.html',dic)
 def index(request):
 	dic={'checksession':check_user(request)}
 	return render(request,'index.html',dic)
 def aboutus(request):
-	return render(request,'about-us.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'about-us.html',dic)
 def blog(request):
-	return render(request,'blog.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'blog.html',dic)
 def contact(request):
-	return render(request,'contact.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'contact.html',dic)
 def coursedetails(request):
 	try:
 		course_id=request.GET.get('course_id')
@@ -93,8 +97,7 @@ def courses(request):
 		else:
 			average_rating=5
 		course_rating[i.Course_ID]=average_rating
-	print(course_rating)
-	return render(request,'courses.html',{'data':data, 'checksession':check_user,'course_rating':course_rating})
+	return render(request,'courses.html',{'data':data, 'checksession':check_user(request),'course_rating':course_rating})
 def mycourses(request):
 	'''user_id=request.session['userid']
 	course_ids=[]
@@ -118,15 +121,18 @@ def mycourses(request):
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):
-	return render(request,'single-blog.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'single-blog.html',dic)
 def adminlogin(request):
 	return render(request,'adminpages/login.html',{})
 def admincodorderlist(request):
 	return render(request,'adminpages/codorderlist.html',{})
 def login(request):
-	return render(request,'login.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'login.html',dic)
 def registration(request):
-	return render(request,'registration.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'registration.html',dic)
 @csrf_exempt
 def socialsave(request):
 	if request.method=='POST':
@@ -206,7 +212,9 @@ def verifyuser(request):
 			request.session['userid'] = uid
 			return HttpResponse("<script>alert('Account Created Successfully!'); window.location.replace('/userdashboard/')</script>")
 		else:
-			dic={'msg':'Incorrect OTP', 'userid':uid}
+			dic={'checksession':check_user(request),
+				'msg':'Incorrect OTP',
+				'userid':uid}
 			return render(request,'verify.html',dic)
 	else:
 		return HttpResponse('<h1>400 Page Not Found</h1>')
@@ -226,7 +234,9 @@ Team Edutern'''
 	sub='Edutern One Time Password (OTP)'
 	email=EmailMessage(sub,msg,to=[email])
 	email.send()
-	dic={'msg':'OTP Sent', 'userid':uid}
+	dic={'checksession':check_user(request),
+		'msg':'OTP Sent',
+		'userid':uid}
 	return render(request,'verify.html',dic)
 @csrf_exempt
 def checklogin(request):
@@ -452,10 +462,6 @@ def checkout(request):
 	if request.method=='POST':
 		course_id=request.GET.get('course_id')
 		user_id=request.session['userid']
-		#userid=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
-		print(user_id)
-		#print(userid)
-		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
 		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
 		usercourse.save()
 		lectures=LecturesData.objects.filter(Course_ID=course_id).all()
