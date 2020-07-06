@@ -535,3 +535,23 @@ def admincompletecourses(request):
 	return render(request,'adminpages/completecourses.html',{})
 def adminincompletecourses(request):
 	return render(request,'adminpages/incompletecourses.html',{})
+def reviewform(request):
+	if request.method=='POST':
+		userid=request.session['userid']
+		user_fname=UserData.objects.filter(User_ID=userid).values('User_FName')[0]['User_FName']
+		user_lname=UserData.objects.filter(User_ID=userid).values('User_LName')[0]['User_LName']
+		review=request.POST['star']
+		feedback=request.POST['feedback']
+		Course_id=request.GET.get('course_id')
+		user_name=user_fname+" "+user_lname
+		print(user_name)
+		#if UserCourses(UserID=userid,Course_ID=Course_id).exists():
+		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
+		review_obj.save()
+		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
+def adminsendcertificate(request):
+	return render(request,'adminpages/sendcertificate.html',{})
+def adminsendbulk(request):
+	return render(request,'adminpages/sendbulk.html',{})
+def adminsendtoone(request):
+	return render(request,'adminpages/sendtoone.html',{})

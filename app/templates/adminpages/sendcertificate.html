@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Bazzaars - List Category</title>
+    <title>Edutern - Add Lectures</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -134,44 +134,39 @@
             </div>
         </div>
 
-        <div class="content mt-3">
-            <div class="animated fadeIn">
-                <div class="row">
-
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <strong class="card-title">List Category</strong>
+        <div style="padding:30px;">
+            <div class="card">
+                <div class="card-header"><strong>Send Certificates</strong><small> Form</small></div>
+                    <div class="card-body card-block">
+                        <form action="/adminsavelecture/" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="company" class=" form-control-label">Select User</label>
+                                <select name="course" id="select" class="form-control">
+                                    {% for x in data %}
+                                    <option value="{{ x.Course_ID|safe }}">{{ x.Course_Name|safe }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <div class="card-body">
-                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Category ID</th>
-                                            <th>Category Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for x in data %}
-                                        <tr>
-                                            <td>{{ x.Category_ID|safe }}</td>
-                                            <td>{{ x.Category_Name|safe }}</td>
-                                            <td><a class="btn btn-danger"href="/admindeletecategory/?cid={{ x.Category_ID|safe }}">Delete</a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                            <div class="form-group">
+                                <label for="company" class=" form-control-label">Subject</label>
+                                <input type="text" name="name" class="form-control">
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="company" class=" form-control-label">Message</label>
+                                <textarea type="text" name="name" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="company" class=" form-control-label">Attach Certificate</label>
+                                <input type="file" name="video" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Send" class="btn btn-success" onclick="document.getElementById('process').style.display='block';">
+                                <label id="process" style="display:none;color:green;font-weight:bold;">Processing Please Wait...</label>
+                            </div>
+                        </form>
                     </div>
-
-
                 </div>
-            </div><!-- .animated -->
-        </div><!-- .content -->
-
-
+            </div>
     </div><!-- /#right-panel -->
 
     <!-- Right Panel -->

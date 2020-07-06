@@ -56,6 +56,9 @@ urlpatterns = [
     path('checkout/',checkout),
     path('mycourses/',mycourses),
     path('reviewform/',reviewform),
+    path('adminsendcertificate/',adminsendcertificate),
+    path('adminsendbulk/',adminsendbulk),
+    path('adminsendtoone/',adminsendtoone),
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
