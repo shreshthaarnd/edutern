@@ -232,7 +232,7 @@ def checklogin(request):
 	if request.method=='POST':
 		email=request.POST.get('email')
 		password=request.POST.get('password')
-		if UserData.objects.filter(User_Email=email,User_Password=password).exists():
+		if UserData.objects.filter(User_Email=email,User_Password=password,Status='Active').exists():
 			for x in UserData.objects.filter(User_Email=email,User_Password=password):
 				request.session['userid']=x.User_ID
 			return redirect('/userdashboard/')
