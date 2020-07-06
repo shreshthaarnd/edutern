@@ -142,8 +142,38 @@
     <!--================Contact Area =================-->
 
     <!--================ start footer Area  =================-->
-    <footer class="footer-area section_gap" style="">
+    <footer class="footer-area section_gap" style="padding-bottom:20px;">
         <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 single-footer-widget">
+                    <h4>About Us</h4>
+                    <p>About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. About us here. </p>
+                </div>
+                <div class="col-lg-4 col-md-6 single-footer-widget">
+                    <h4>Important Links</h4>
+                    <ul>
+                        <li><a href="/courses/">Courses</a></li>
+                        {% if checksession == True %}
+                        <li><a href="/userdashboard/">My Courses</a></li>
+                        <li><a href="/userdashboard/">User Dashboard</a></li>
+                        {% else %}
+                        <li><a href="/registration/">Enroll Now</a></li>
+                        <li><a href="/login/">Login to Dashboard</a></li>
+                        {% endif %}
+                        <li><a href="/contact/">Contact Us</a></li>
+                        <li><a href="/about/">Know More About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 single-footer-widget">
+                    <h4>Other Links</h4>
+                    <p>Connect with us socially,</p>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i> Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="row footer-bottom d-flex justify-content-between">
                 
                 <p class="col-lg-8 col-sm-12 footer-text m-0 text-white">Website Designed & Developed By : <a href="https://www.srd.mobi">SRD - Shreshtha Research & Development</a></p>
