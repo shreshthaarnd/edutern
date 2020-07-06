@@ -43,9 +43,6 @@
                             </span>
                         </a>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-8 header-top-right">
-                        <a href="#" class="text-uppercase">Login</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -74,31 +71,11 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="about-us.html">About</a></li>
-                            <li class="nav-item submenu dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">Pages</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="courses.html">Courses</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="course-details.html">Course Details</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item submenu dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">Blog</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item active"><a class="nav-link" href="contact.html">Contact</a></li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link search" id="search">
-                                    <i class="lnr lnr-magnifier"></i>
-                                </a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/index/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/courses/">Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/userdashboard/">My Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/userdashboard/">My Account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -108,78 +85,56 @@
     <!--================ End Header Menu Area =================-->
 
     <!--================Home Banner Area =================-->
-    <section class="banner_area">
-        <div class="banner_inner d-flex align-items-center">
-            <div class="overlay"></div>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6">
-                        <div class="banner_content text-center">
-                            {% for x in course_data %}
-                            <h2>{{x.Course_Name}}</h2>
-                            <p>{{x.Course_Objective|slice:":100"}}</p>
-                            {% endfor %}
-                            <div class="page_link">
-                                <a href="index.html">Home</a>
-                                <a href="contact.html">Course Name</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="banner_area" style="min-height:50px;">
+        <div class="banner_inner d-flex align-items-center w3-blue" style="min-height:50px;padding:10px;">
+            {% for x in course_data %}
+            <center>
+            <h1 style="color:white;">{{ x.Course_Name|safe }} : Lecture - {% for i in lecture_data %}{% if i.Lecture_ID == lecture_id %}{{ i.Lecture_Name|safe }}{% endif %}{% endfor %}</h1>
+            </center>
+            {% endfor %}
         </div>
     </section>
     <!--================End Home Banner Area =================-->
 
     <!--================Contact Area =================-->
-    <section class="contact_area section_gap">
+    <section class="contact_area" style="background-color:black;">
         <div class="container">
-            {% for i in lecture_data %}
-            {% if i.Lecture_ID == lecture_id %}
-            <h1 style="margin:10px;">Lecture : {{ i.Lecture_Name|safe }}</h1>
             <div class="row">
-                <video style="width:100%;" controls autoplay onended="another()">
-                    <source src="{{ i.Lecture_Video.url|safe }}" type="video/mp4">
-                </video>
-                <input type="hidden" value="{{ i.Lecture_ID }}" id="myvvv">
-            </div>
-            {% endif %}
-            {% endfor %}
-            <div class="row" style="margin-top:30px;">
-                <div style="padding:20px;margin:auto;width:700px;"class="column">
-                <h2>Play List</h2>
-                <table class="w3-table-all w3-hoverable" style="width:100%;font-size:20px;">
-                   {% for i in lecture_data %}
-                   
-                    <tr class="w3-black">
-                        <td style="padding-top:35px;"><span style="padding:10px;border-radius:10px;"class="w3-green"><i class="fa fa-check"></i></span></td>
-                        <td><img style="width:100px;"src="{% static 'img/event1.jpg' %}"></td>
-                        <td style="padding-top:35px;font-weight:bold;">{{ i.Lecture_Name|safe }}</td>
-                        <td style="padding-top:20px;"><a href="/openlecture/?course={{ i.Course_ID|safe }}&lecture={{ i.Lecture_ID|safe }}" style="border-radius:10px;margin:10px;" class="w3-button w3-blue w3-hover-white">View</a></td>
-                        
-                        {% for lec in userlec %}
-                        {% if i.Lecture_ID == lec.Lecture_ID %}
-                        {% if not lec.Lecture_Watched %}
-                        
-                        <input type="hidden" value="{{ i.Lecture_ID }}" id="newlec">
-                        <input type="hidden" value="{{ i.Course_ID }}" id="course">
-    
-                        {% endif %}
-                        {% endif %}
-                        {% endfor %}
-                    
-                    </tr>
-                        
-                    {% endfor %}
-
-                    
-                </table>
-            
-                
+                <div class="column">
+                {% for i in lecture_data %}
+                {% if i.Lecture_ID == lecture_id %}
+                    <video style="width:710px;height:400px;" controls autoplay onended="another()">
+                        <source src="{{ i.Lecture_Video.url|safe }}" type="video/mp4">
+                    </video>
+                    <input type="hidden" value="{{ i.Lecture_ID }}" id="myvvv">
+                {% endif %}
+                {% endfor %}
                 </div>
-                <div style="padding:20px;margin:auto;"class="column">
-                    <h2>Progress</h2>
-                    <canvas id="chart" width="400" height="400"></canvas>
+                <div class="column" style="width:425px;overflow-y:auto;height:400px;">
+                    <table class="w3-table-all w3-hoverable" style="width:100%;font-size:20px;">
+                       {% for i in lecture_data %}
+                       
+                        <tr class="w3-black">
+                            <td style="padding-top:35px;"><span style="padding:10px;border-radius:10px;"class="w3-green"><i class="fa fa-check"></i></span></td>
+                            <td style="padding-top:35px;font-weight:bold;">{{ i.Lecture_Name|safe }}</td>
+                            <td style="padding-top:20px;"><a href="/openlecture/?course={{ i.Course_ID|safe }}&lecture={{ i.Lecture_ID|safe }}" style="border-radius:10px;margin:10px;" class="w3-button w3-blue w3-hover-white">View</a></td>
+                            {% for lec in userlec %}
+                            {% if i.Lecture_ID == lec.Lecture_ID %}
+                            {% if not lec.Lecture_Watched %}
+                            
+                            <input type="hidden" value="{{ i.Lecture_ID }}" id="newlec">
+                            <input type="hidden" value="{{ i.Course_ID }}" id="course">
+        
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        
+                        </tr>
+                            
+                        {% endfor %}
+
+                        
+                    </table>
                 </div>
             </div>
         </div>
@@ -187,74 +142,13 @@
     <!--================Contact Area =================-->
 
     <!--================ start footer Area  =================-->
-    <footer class="footer-area section_gap">
+    <footer class="footer-area section_gap" style="">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-2 col-md-6 single-footer-widget">
-                    <h4>Top Products</h4>
-                    <ul>
-                        <li><a href="#">Managed Website</a></li>
-                        <li><a href="#">Manage Reputation</a></li>
-                        <li><a href="#">Power Tools</a></li>
-                        <li><a href="#">Marketing Service</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 single-footer-widget">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#">Jobs</a></li>
-                        <li><a href="#">Brand Assets</a></li>
-                        <li><a href="#">Investor Relations</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 single-footer-widget">
-                    <h4>Features</h4>
-                    <ul>
-                        <li><a href="#">Jobs</a></li>
-                        <li><a href="#">Brand Assets</a></li>
-                        <li><a href="#">Investor Relations</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 single-footer-widget">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Guides</a></li>
-                        <li><a href="#">Research</a></li>
-                        <li><a href="#">Experts</a></li>
-                        <li><a href="#">Agencies</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-6 single-footer-widget">
-                    <h4>Newsletter</h4>
-                    <p>You can trust us. we only send promo offers,</p>
-                    <div class="form-wrap" id="mc_embed_signup">
-                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                            method="get" class="form-inline">
-                            <input class="form-control" name="EMAIL" placeholder="Your Email Address" onfocus="this.placeholder = ''"
-                                onblur="this.placeholder = 'Your Email Address '" required="" type="email">
-                            <button class="click-btn btn btn-default">
-                                <span>subscribe</span>
-                            </button>
-                            <div style="position: absolute; left: -5000px;">
-                                <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
-                            </div>
-
-                            <div class="info"></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
             <div class="row footer-bottom d-flex justify-content-between">
-                <p class="col-lg-8 col-sm-12 footer-text m-0 text-white">Copyright © 2018 All rights reserved | This
-                    template is
-                    made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="#">Colorlib</a></p>
-                <div class="col-lg-4 col-sm-12 footer-social">
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-dribbble"></i></a>
-                    <a href="#"><i class="fa fa-behance"></i></a>
+                
+                <p class="col-lg-8 col-sm-12 footer-text m-0 text-white">Website Designed & Developed By : <a href="https://www.srd.mobi">SRD - Shreshtha Research & Development</a></p>
+                <div class="col-lg-4 col-sm-12">
+                    <p class="footer-text m-0 text-white">Copyright © 2020 All rights reserved @ <a href="/index/">Edutern.in</a></p>
                 </div>
             </div>
         </div>
