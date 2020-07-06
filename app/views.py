@@ -20,43 +20,67 @@ def logout(request):
 	except:
 		return redirect('/index/')
 def socialreg(request):
-	return render(request,'socialreg.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'socialreg.html',dic)
 def index(request):
 	dic={'checksession':check_user(request)}
 	return render(request,'index.html',dic)
 def aboutus(request):
-	return render(request,'about-us.html',{})
-def blog(request):
-	return render(request,'blog.html',{})
-def contact(request):
-	return render(request,'contact.html',{})
-def coursedetails(request):
-	course_id=request.GET.get('course_id')
-	user_id=request.session['userid']
 	dic={'checksession':check_user(request)}
-	if CourseData.objects.filter(Course_ID=course_id).exists():
-		course_data=CourseData.objects.filter(Course_ID=course_id)
-		lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
-		
-		reviews=UserReviews.objects.filter(Course_ID=course_id).all()
-		if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
-			#status=UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).values('status')[0]['status']
-			status=True
-			
-			if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
-				review_status=True
+	return render(request,'about-us.html',dic)
+def blog(request):
+	dic={'checksession':check_user(request)}
+	return render(request,'blog.html',dic)
+def contact(request):
+	dic={'checksession':check_user(request)}
+	return render(request,'contact.html',dic)
+def coursedetails(request):
+	try:
+		course_id=request.GET.get('course_id')
+		user_id=request.session['userid']
+		if CourseData.objects.filter(Course_ID=course_id).exists():
+			course_data=CourseData.objects.filter(Course_ID=course_id)
+			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
+				status=True
+				if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
+					review_status=True
+				else:
+					review_status=False
+				dic={'checksession':check_user(request),
+					'course_data':course_data,
+					'lecture_data':lecture_data,
+					'status':status,
+					'review_status':review_status,
+					'reviews':reviews}			
+				return render(request,'course-details.html',dic)		
 			else:
+				status=False
 				review_status=False
-			
-			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
-		
+				dic={'checksession':check_user(request),
+					'course_data':course_data,
+					'lecture_data':lecture_data,
+					'status':status,
+					'review_status':review_status,
+					'reviews':reviews}
+				return render(request,'course-details.html',dic)
 		else:
-			status=False
-			review_status=False
-			return render(request,'course-details.html',{'dic':dic,'course_data':course_data,'lecture_data':lecture_data,'status':status,'review_status':review_status,'reviews':reviews})
-		
-	else:
-		return HttpResponse("<h1>Course not found")
+			return HttpResponse("<h1>Course not found</h1>")
+	except:
+		course_id=request.GET.get('course_id')
+		if CourseData.objects.filter(Course_ID=course_id).exists():
+			course_data=CourseData.objects.filter(Course_ID=course_id)
+			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
+			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			dic={'checksession':check_user(request),
+				'course_data':course_data,
+				'lecture_data':lecture_data,
+				'reviews':reviews}
+			return render(request,'course-details.html',dic)
+		else:
+			return HttpResponse("<h1>Course not found</h1>")
+	
 def courses(request):
 	data=CourseData.objects.all()
 	dic={'checksession':check_user(request)}
@@ -86,15 +110,18 @@ def mycourses(request):
 def elements(request):
 	return render(request,'elements.html',{})
 def singleblog(request):
-	return render(request,'single-blog.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'single-blog.html',dic)
 def adminlogin(request):
 	return render(request,'adminpages/login.html',{})
 def admincodorderlist(request):
 	return render(request,'adminpages/codorderlist.html',{})
 def login(request):
-	return render(request,'login.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'login.html',dic)
 def registration(request):
-	return render(request,'registration.html',{})
+	dic={'checksession':check_user(request)}
+	return render(request,'registration.html',dic)
 @csrf_exempt
 def socialsave(request):
 	if request.method=='POST':
@@ -174,7 +201,9 @@ def verifyuser(request):
 			request.session['userid'] = uid
 			return HttpResponse("<script>alert('Account Created Successfully!'); window.location.replace('/userdashboard/')</script>")
 		else:
-			dic={'msg':'Incorrect OTP', 'userid':uid}
+			dic={'checksession':check_user(request),
+				'msg':'Incorrect OTP',
+				'userid':uid}
 			return render(request,'verify.html',dic)
 	else:
 		return HttpResponse('<h1>400 Page Not Found</h1>')
@@ -194,7 +223,9 @@ Team Edutern'''
 	sub='Edutern One Time Password (OTP)'
 	email=EmailMessage(sub,msg,to=[email])
 	email.send()
-	dic={'msg':'OTP Sent', 'userid':uid}
+	dic={'checksession':check_user(request),
+		'msg':'OTP Sent',
+		'userid':uid}
 	return render(request,'verify.html',dic)
 @csrf_exempt
 def checklogin(request):
@@ -427,10 +458,6 @@ def checkout(request):
 	if request.method=='POST':
 		course_id=request.GET.get('course_id')
 		user_id=request.session['userid']
-		#userid=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
-		print(user_id)
-		#print(userid)
-		#ur_id=UserData.objects.filter(User_ID=user_id).values('id')[0]['id']
 		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
 		usercourse.save()
 		lectures=LecturesData.objects.filter(Course_ID=course_id).all()
