@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'vendors/animate-css/animate.css' %}">
     <!-- main css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'w3.css' %}">
 </head>
 
 <body>
@@ -148,11 +149,11 @@
                                             {% for n,m in course_rating.items %}
                                             {% ifequal n course.Course_ID %}
                                             {% if m >= 0.0  and m < 2.5 %}
-                                            <i class="lnr lnr-bubble" style="background-color: Red;">{{m}}</i>
+                                            <span class="w3-red" style="padding:5px;border-radius:5px;">{{m}} <i class="fa fa-star"></i></span>
                                             {% elif m >= 2.5 and m < 3.5 %}
-                                            <i class="lnr lnr-bubble" style="background-color: yellow;">{{m}}</i>
+                                            <span class="w3-yellow" style="padding:5px;border-radius:5px;">{{m}} <i class="fa fa-star"></i></span>
                                             {% else %}
-                                            <i class="lnr lnr-bubble" style="background-color: darkseagreen;">{{m}}</i>
+                                            <span class="w3-green" style="padding:5px;border-radius:5px;">{{m}} <i class="fa fa-star"></i></span>
                                             {% endif %}
                                             {% endifequal %}
                                             {% endfor %}

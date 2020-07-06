@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edutern - Course List</title>
+    <title>Edutern - User Review List</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -179,14 +179,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for x in data %}
                                         <tr>
-                                            <td>FGHT67</td>
-                                            <td>HJYU78</td>
-                                            <td>HJKY78</td>
-                                            <td>5 <i class="fa fa-star"></i></td>
-                                            <td>Nice</td>
-                                            <td><a class="btn btn-danger" href="">Delete</a></td>
+                                            <td>{{ x.User_ID|safe }}</td>
+                                            <td>{{ x.Course_ID|safe }}</td>
+                                            <td>{{ x.Review_ID|safe }}</td>
+                                            <td>{{ x.Review|safe }} <i class="fa fa-star"></i></td>
+                                            <td>{{ x.Feedback|safe }}</td>
+                                            <td><a class="btn btn-danger" href="/deletereview/?rid={{ x.Review_ID|safe }}">Delete</a></td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>

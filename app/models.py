@@ -42,13 +42,14 @@ class UserCourses(models.Model):
 	Course_ID=models.CharField(max_length=20)
 	status=models.BooleanField(default=False)
 class UserReviews(models.Model):
-		User_ID=models.CharField(max_length=20,null=True,blank=True)
-		User_Name=models.CharField(max_length=200,null=True,blank=True)
-		Course_ID=models.CharField(max_length=20,null=True,blank=True)
-		Review=models.CharField(max_length=5,null=True,blank=True)
-		Feedback=models.TextField(max_length=200,blank=True,null=True)
-		def __str__(self):
-			return self.Review
+	Review_ID=models.CharField(max_length=20,primary_key=True)
+	User_ID=models.CharField(max_length=20,null=True,blank=True)
+	User_Name=models.CharField(max_length=200,null=True,blank=True)
+	Course_ID=models.CharField(max_length=20,null=True,blank=True)
+	Review=models.CharField(max_length=5,null=True,blank=True)
+	Feedback=models.TextField(max_length=200,blank=True,null=True)
+	def __str__(self):
+		return self.Review
 class UserLectures(models.Model):
 	User_ID=models.CharField(max_length=20,null=True,blank=True)
 	Course_ID=models.CharField(max_length=20,null=True,blank=True)

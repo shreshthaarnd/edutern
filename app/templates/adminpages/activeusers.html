@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edutern - Course List</title>
+    <title>Edutern - Active Users List</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -172,19 +172,17 @@
                                         <tr>
                                             <th>User ID</th>
                                             <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for x in data %}
                                         <tr>
-                                            <td>MHK45</td>
-                                            <td>Sonali</td>
-                                            <td>sona23@gmail.com</td>
-                                            <td>6789098778</td>
-                                            <td><a class="btn btn-danger" href="">Deactivate</a></td>
+                                            <td>{{ x.User_ID|safe }}</td>
+                                            <td>{{ x.User_FName|safe }} {{ x.User_LName|safe }}</td>
+                                            <td><a class="btn btn-danger" href="/makeuserdeactive/?uid={{ x.User_ID|safe }}">Deactivate</a></td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>

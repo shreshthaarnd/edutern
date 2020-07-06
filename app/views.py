@@ -148,6 +148,25 @@ def socialsave(request):
 			obj.save()
 			request.session['userid'] = uid
 			return redirect('/userdashboard/')
+def reviewform(request):
+	if request.method=='POST':
+		userid=request.session['userid']
+		user_fname=UserData.objects.filter(User_ID=userid).values('User_FName')[0]['User_FName']
+		user_lname=UserData.objects.filter(User_ID=userid).values('User_LName')[0]['User_LName']
+		review=request.POST['star']
+		feedback=request.POST['feedback']
+		Course_id=request.GET.get('course_id')
+		user_name=user_fname+" "+user_lname
+		r="REV00"
+		x=1
+		rid=r+str(x)
+		while UserReviews.objects.filter(Review_ID=rid).exists():
+			x=x+1
+			rid=r+str(x)
+		x=int(x)
+		review_obj=UserReviews(Review_ID=rid,User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
+		review_obj.save()
+		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
 @csrf_exempt
 def saveuser(request):
 	if request.method=='POST':
@@ -156,7 +175,6 @@ def saveuser(request):
 		email=request.POST.get('email')
 		mobile=request.POST.get('mobile')
 		password=request.POST.get('password')
-		obj=UserData.objects.all().delete()
 		u="U00"
 		x=1
 		uid=u+str(x)
@@ -353,57 +371,6 @@ def openlecture(request):
 			i.save()
 	Userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).all()
 	return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data,'userlec':Userlec})
-def adminaddlectures(request):
-	try:
-		adminid=request.session['adminid']
-		data=CourseData.objects.all()
-		return render(request,'adminpages/addlectures.html',{'data':data})
-	except:
-		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
-@csrf_exempt
-def adminsavelecture(request):
-	if request.method=='POST':
-		course=request.POST.get('course')
-		name=request.POST.get('name')
-		video=request.FILES['video']
-		l="LEC00"
-		x=1
-		lid=l+str(x)
-		while LecturesData.objects.filter(Lecture_ID=lid).exists():
-			x=x+1
-			lid=l+str(x)
-		x=int(x)
-		obj=LecturesData(
-			Lecture_ID=lid,
-			Course_ID=course,
-			Lecture_Name=name,
-			Lecture_Video=video
-			)
-		obj.save()
-		return HttpResponse("<script>alert('Lecture Added Successfully'); window.location.replace('/adminaddlectures/')</script>")
-	else:
-		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
-def adminlectureslist(request):
-	try:
-		adminid=request.session['adminid']
-		data=LecturesData.objects.all()
-		return render(request,'adminpages/lectureslist.html',{'data':data})
-	except:
-		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
-def adminuserslist(request):
-	return render(request,'adminpages/userslist.html',{})
-def adminactiveusers(request):
-	return render(request,'adminpages/activeusers.html',{})
-def admindeactiveusers(request):
-	return render(request,'adminpages/deactiveusers.html',{})
-
-def admincourseenrolls(request):
-	return render(request,'adminpages/courseenrolls.html',{})
-def admincoursespayment(request):
-	return render(request,'adminpages/coursespayment.html',{})
-def adminuserreview(request):
-	return render(request,'adminpages/userreview.html',{})
-
 def forget_password(request):
 	if request.method=='POST':
 		password=''
@@ -471,23 +438,100 @@ def checkout(request):
 		course_id=request.GET.get('course_id')
 		course_data=CourseData.objects.filter(Course_ID=course_id)
 		return render(request,'checkout.html',{'course_data':course_data,'checksession':check_user(request)})
-
+def adminaddlectures(request):
+	try:
+		adminid=request.session['adminid']
+		data=CourseData.objects.all()
+		return render(request,'adminpages/addlectures.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+@csrf_exempt
+def adminsavelecture(request):
+	if request.method=='POST':
+		course=request.POST.get('course')
+		name=request.POST.get('name')
+		video=request.FILES['video']
+		l="LEC00"
+		x=1
+		lid=l+str(x)
+		while LecturesData.objects.filter(Lecture_ID=lid).exists():
+			x=x+1
+			lid=l+str(x)
+		x=int(x)
+		obj=LecturesData(
+			Lecture_ID=lid,
+			Course_ID=course,
+			Lecture_Name=name,
+			Lecture_Video=video
+			)
+		obj.save()
+		return HttpResponse("<script>alert('Lecture Added Successfully'); window.location.replace('/adminaddlectures/')</script>")
+	else:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def adminlectureslist(request):
+	try:
+		adminid=request.session['adminid']
+		data=LecturesData.objects.all()
+		return render(request,'adminpages/lectureslist.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def adminuserslist(request):
+	try:
+		adminid=request.session['adminid']
+		data=UserData.objects.all()
+		return render(request,'adminpages/userslist.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def adminactiveusers(request):
+	try:
+		adminid=request.session['adminid']
+		data=UserData.objects.filter(Status='Active')
+		return render(request,'adminpages/activeusers.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def makeuserdeactive(request):
+	try:
+		adminid=request.session['adminid']
+		userid=request.GET.get('uid')
+		UserData.objects.filter(User_ID=userid).update(Status='Deactive')
+		return redirect('/adminactiveusers/')
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def admindeactiveusers(request):
+	try:
+		adminid=request.session['adminid']
+		data=UserData.objects.filter(Status='Deactive')
+		return render(request,'adminpages/deactiveusers.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def makeuseractive(request):
+	try:
+		adminid=request.session['adminid']
+		userid=request.GET.get('uid')
+		UserData.objects.filter(User_ID=userid).update(Status='Active')
+		return redirect('/admindeactiveusers/')
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def admincourseenrolls(request):
+	return render(request,'adminpages/courseenrolls.html',{})
+def admincoursespayment(request):
+	return render(request,'adminpages/coursespayment.html',{})
+def adminuserreview(request):
+	try:
+		adminid=request.session['adminid']
+		data=UserReviews.objects.all()
+		return render(request,'adminpages/userreview.html',{'data':data})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def deletereview(request):
+	try:
+		adminid=request.session['adminid']
+		rid=request.GET.get('rid')
+		UserReviews.objects.filter(Review_ID=rid).delete()
+		return redirect('/adminuserreview/')
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincompletecourses(request):
 	return render(request,'adminpages/completecourses.html',{})
 def adminincompletecourses(request):
 	return render(request,'adminpages/incompletecourses.html',{})
-def reviewform(request):
-	if request.method=='POST':
-		userid=request.session['userid']
-		user_fname=UserData.objects.filter(User_ID=userid).values('User_FName')[0]['User_FName']
-		user_lname=UserData.objects.filter(User_ID=userid).values('User_LName')[0]['User_LName']
-		review=request.POST['star']
-		feedback=request.POST['feedback']
-		Course_id=request.GET.get('course_id')
-		user_name=user_fname+" "+user_lname
-		print(user_name)
-		#if UserCourses(UserID=userid,Course_ID=Course_id).exists():
-		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
-		review_obj.save()
-		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
-

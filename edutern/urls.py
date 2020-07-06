@@ -38,10 +38,13 @@ urlpatterns = [
     path('adminlectureslist/',adminlectureslist),
     path('adminuserslist/',adminuserslist),
     path('adminactiveusers/',adminactiveusers),
+    path('makeuserdeactive/',makeuserdeactive),
     path('admindeactiveusers/',admindeactiveusers),
+    path('makeuseractive/',makeuseractive),
     path('admincourseenrolls/',admincourseenrolls),
     path('admincoursespayment/',admincoursespayment),
     path('adminuserreview/',adminuserreview),
+    path('deletereview/',deletereview),
     path('admincompletecourses/',admincompletecourses),
     path('adminincompletecourses/',adminincompletecourses),
     
