@@ -321,7 +321,7 @@ var myChart = new Chart(ctx, {
         labels: ['Lectures Watched', 'Unwatched'],
         datasets: [{
             label: 'Progress',
-            data: [25, 75],
+            data: [{{progress}}, 100-{{progress}}],
             backgroundColor: [
                 'red',
                 'blue',
