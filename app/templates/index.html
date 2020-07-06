@@ -677,8 +677,13 @@
 					<h4>Important Links</h4>
 					<ul>
 						<li><a href="/courses/">Courses</a></li>
+						{% if checksession == True %}
+						<li><a href="/userdashboard/">My Courses</a></li>
+						<li><a href="/userdashboard/">User Dashboard</a></li>
+						{% else %}
 						<li><a href="/registration/">Enroll Now</a></li>
 						<li><a href="/login/">Login to Dashboard</a></li>
+						{% endif %}
 						<li><a href="/contact/">Contact Us</a></li>
 						<li><a href="/about/">Know More About Us</a></li>
 					</ul>

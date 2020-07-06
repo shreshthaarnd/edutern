@@ -84,20 +84,9 @@ def coursedetails(request):
 def courses(request):
 	data=CourseData.objects.all()
 	dic={'checksession':check_user(request)}
-	sum=0
-	course_rating={}
-	for i in data:
-		sum=0
-		if UserReviews.objects.filter(Course_ID=i.Course_ID).exists():
-			rating=UserReviews.objects.filter(Course_ID=i.Course_ID).all()
-			for j in rating:
-				sum=sum+int(j.Review)
-			count=UserReviews.objects.filter(Course_ID=i.Course_ID).count()
-			average_rating=sum/count
-		else:
-			average_rating=5
-		course_rating[i.Course_ID]=average_rating
-	return render(request,'courses.html',{'data':data, 'checksession':check_user(request),'course_rating':course_rating})
+	course_rating=get_Course_Rating(request)
+	print(course_rating)
+	return render(request,'courses.html',{'data':data, 'checksession':check_user,'course_rating':course_rating})
 def mycourses(request):
 	'''user_id=request.session['userid']
 	course_ids=[]
@@ -320,8 +309,14 @@ def userdashboard(request):
 	uid=request.session['userid']
 	data=UserData.objects.filter(User_ID=uid).all()
 	mycourse=UserCourses.objects.filter(UserID=uid)
+	course_progress={}
+	for i in mycourse:
+		progress=get_Progress(request,i.Course_ID)
+		course_progress[i.Course_ID]=progress
+	#print(course_progress)
+
 	course=CourseData.objects.all()
-	return render(request,'userdashboard.html',{'data':data,'courses':course,'my_courses':mycourse,})
+	return render(request,'userdashboard.html',{'data':data,'courses':course,'my_courses':mycourse,'course_progress':course_progress})
 def courseplayer(request):
 	uid=request.session['userid']
 	course_id=request.GET.get('course_id')
@@ -339,9 +334,10 @@ def courseplayer(request):
 			for i in userlec:
 				i.Lecture_Watched=True
 				i.save()
-		
+		progress=get_Progress(request,course_id)
+		#print(progress)
 		Userlec=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).all()
-		return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data,'userlec':Userlec})
+		return render(request,'courseplayer.html',{'lecture_id':lecture_id,'course_data':course,'lecture_data':lecture_data,'userlec':Userlec,'progress':progress})
 	else:
 		return HttpResponse("<script>alert('Please enroll into the course'); window.location.replace('/userdashboard/')</script>")
 def openlecture(request):
