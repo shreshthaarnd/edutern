@@ -490,4 +490,9 @@ def reviewform(request):
 		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
 		review_obj.save()
 		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
-
+def adminsendcertificate(request):
+	return render(request,'adminpages/sendcertificate.html',{})
+def adminsendbulk(request):
+	return render(request,'adminpages/sendbulk.html',{})
+def adminsendtoone(request):
+	return render(request,'adminpages/sendtoone.html',{})
