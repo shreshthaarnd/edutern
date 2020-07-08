@@ -541,8 +541,8 @@ def admincompletecourses(request):
 		progress=int((lecture_watched/total)*100)
 		dt=(i.UserID_id,i.Course_ID,progress)
 		data_items.append(dt)
-	print(dt)
-	print(data_items)
+	#print(dt)
+	#print(data_items)
 	
 	return render(request,'adminpages/completecourses.html',{'data_items':data_items})
 def adminincompletecourses(request):
@@ -555,8 +555,8 @@ def adminincompletecourses(request):
 		progress=int((lecture_watched/total)*100)
 		dt=(i.UserID_id,i.Course_ID,progress)
 		data_items.append(dt)
-	print(dt)
-	print(data_items)
+	#print(dt)
+	#print(data_items)
 	return render(request,'adminpages/incompletecourses.html',{'data_items':data_items})
 def reviewform(request):
 	if request.method=='POST':
