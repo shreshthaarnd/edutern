@@ -155,14 +155,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                       {% for data in data_items %}
+                                       {% if data.2 != 100 %}
+                                       
                                         <tr>
-                                            <td>SDGH67</td>
-                                            <td>HKYU78</td>
+                                            <td>{{data.0}}</td>
+                                            <td>{{data.1}}</td>
+                                            
                                             <td><div class="w3-light-blue" style="">
-                                            <div class="w3-container w3-blue w3-center" style="width:50%">50%</div>
+                                            <div class="w3-container w3-blue w3-center" style="width:{{data.2}}%">{{data.2}}%</div>
+
                                             </div>
+                                               
                                             </td>
                                         </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                        
+                                        
                                     </tbody>
                                 </table>
                                 </div>

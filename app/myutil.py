@@ -54,5 +54,5 @@ def get_Progress(request,course_id):
     if 	UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).exists():
         total_lectures=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id).count()
         watched_lecture=UserLectures.objects.filter(User_ID=request.session['userid'],Course_ID=course_id,Lecture_Watched=True).count()
-        progress=(watched_lecture/total_lectures)*100
+        progress=int((watched_lecture/total_lectures)*100)
     return progress

@@ -154,11 +154,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for data in data_items %}
+                                        {% if data.2 == 100 %}
+                                       
                                         <tr>
-                                            <td>SDGH67</td>
-                                            <td>HKYU78</td>
+                                            <td>{{data.0}}</td>
+                                            <td>{{data.1}}</td>
                                             <td>Complete</td>
+                                        
                                         </tr>
+                                        {% endif %}
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>

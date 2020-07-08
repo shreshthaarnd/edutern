@@ -532,9 +532,32 @@ def deletereview(request):
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincompletecourses(request):
-	return render(request,'adminpages/completecourses.html',{})
+	data=UserCourses.objects.all()
+	dt,data_items=(),[]
+	for i in data:
+		dt=()
+		total=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID).count()
+		lecture_watched=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID,Lecture_Watched=True).count()
+		progress=int((lecture_watched/total)*100)
+		dt=(i.UserID_id,i.Course_ID,progress)
+		data_items.append(dt)
+	print(dt)
+	print(data_items)
+	
+	return render(request,'adminpages/completecourses.html',{'data_items':data_items})
 def adminincompletecourses(request):
-	return render(request,'adminpages/incompletecourses.html',{})
+	data=UserCourses.objects.all()
+	dt,data_items=(),[]
+	for i in data:
+		dt=()
+		total=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID).count()
+		lecture_watched=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID,Lecture_Watched=True).count()
+		progress=int((lecture_watched/total)*100)
+		dt=(i.UserID_id,i.Course_ID,progress)
+		data_items.append(dt)
+	print(dt)
+	print(data_items)
+	return render(request,'adminpages/incompletecourses.html',{'data_items':data_items})
 def reviewform(request):
 	if request.method=='POST':
 		userid=request.session['userid']
