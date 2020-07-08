@@ -10,7 +10,8 @@ from app.myutil import *
 import csv
 from datetime import date
 from .myutil import *
-
+import os
+from django.conf import settings
 # Create your views here.
 def logout(request):
 	try:
@@ -73,6 +74,7 @@ def coursedetails(request):
 			course_data=CourseData.objects.filter(Course_ID=course_id)
 			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
 			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
+			print('hello')
 			dic={'checksession':check_user(request),
 				'course_data':course_data,
 				'lecture_data':lecture_data,
@@ -273,9 +275,16 @@ def adminlogincheck(request):
 def adminindex(request):
 	try:
 		adminid=request.session['adminid']
-		return render(request,'adminpages/index.html',{})
+		return redirect('/adminaddcourse/')
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def adminlogout(request):
+	try:
+		del request.session['adminid']
+		request.session.flush()
+		return redirect('/adminlogin/')
+	except:
+		return redirect('/index/')
 def adminaddcourse(request):
 	try:
 		adminid=request.session['adminid']
@@ -513,7 +522,22 @@ def makeuseractive(request):
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincourseenrolls(request):
-	return render(request,'adminpages/courseenrolls.html',{})
+	try:
+		adminid=request.session['adminid']
+		enrolls=UserCourses.objects.all()
+		return render(request,'adminpages/courseenrolls.html',{'data':enrolls})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
+def admindeleteenrolls(request):
+	try:
+		adminid=request.session['adminid']
+		cid=request.GET.get('cid')
+		uid=request.GET.get('uid')
+		UserCourses.objects.filter(UserID=uid,Course_ID=cid).delete()
+		UserLectures.objects.filter(UserID=uid,Course_ID=cid).delete()
+		return redirect('/admincourseenrolls/')
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincoursespayment(request):
 	return render(request,'adminpages/coursespayment.html',{})
 def adminuserreview(request):
@@ -532,9 +556,45 @@ def deletereview(request):
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincompletecourses(request):
-	return render(request,'adminpages/completecourses.html',{})
+	try:
+		adminid=request.session['adminid']
+		data=UserCourses.objects.all()
+		dt,data_items=(),[]
+		for i in data:
+			dt=()
+			total=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID).count()
+			lecture_watched=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID,Lecture_Watched=True).count()
+			if int(lecture_watched) == 0:
+				progress=int(0)
+				dt=(i.UserID_id,i.Course_ID,progress)
+				data_items.append(dt)
+			else:
+				progress=int((lecture_watched/total)*100)
+				dt=(i.UserID_id,i.Course_ID,progress)
+				data_items.append(dt)
+		return render(request,'adminpages/completecourses.html',{'data_items':data_items})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')	
 def adminincompletecourses(request):
-	return render(request,'adminpages/incompletecourses.html',{})
+	try:
+		adminid=request.session['adminid']
+		data=UserCourses.objects.all()
+		dt,data_items=(),[]
+		for i in data:
+			dt=()
+			total=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID).count()
+			lecture_watched=UserLectures.objects.filter(User_ID=i.UserID_id,Course_ID=i.Course_ID,Lecture_Watched=True).count()
+			if lecture_watched == 0:
+				progress=int(0)
+				dt=(i.UserID_id,i.Course_ID,progress)
+				data_items.append(dt)
+			else:
+				progress=int((lecture_watched/total)*100)
+				dt=(i.UserID_id,i.Course_ID,progress)
+				data_items.append(dt)
+		return render(request,'adminpages/incompletecourses.html',{'data_items':data_items})
+	except:
+		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def reviewform(request):
 	if request.method=='POST':
 		userid=request.session['userid']
@@ -544,13 +604,46 @@ def reviewform(request):
 		feedback=request.POST['feedback']
 		Course_id=request.GET.get('course_id')
 		user_name=user_fname+" "+user_lname
-		print(user_name)
-		#if UserCourses(UserID=userid,Course_ID=Course_id).exists():
 		review_obj=UserReviews(User_ID=userid,User_Name=user_name,Course_ID=Course_id,Review=review,Feedback=feedback)
 		review_obj.save()
 		return HttpResponse("<script>alert('ThankYou for your feedback..'); window.location.replace('/userdashboard/')</script>")
+@csrf_exempt
 def adminsendcertificate(request):
-	return render(request,'adminpages/sendcertificate.html',{})
+	if request.method=='POST':
+		user=request.POST.get('user')
+		course=request.POST.get('course')
+		cert=request.FILES['cert']
+		for x in UserData.objects.filter(User_ID=user):
+			cid=uuid.uuid5(uuid.NAMESPACE_DNS, str(date.today().strftime("%d/%m/%Y"))+user+course)
+			CertificatesData(Cert_ID=cid,Certificate=cert).save()
+			msg='''Hi '''+x.User_FName+'''!
+Cogratulations! on your course completion from Edutern.in,
+
+You can download your certificate from the following link:
+
+https://www.edutern.in/downloadcert/?certid='''+str(cid)+'''
+
+Thanks & Regards,
+Team Edutern'''
+			sub='Edutern - Course Certificate'
+			email=EmailMessage(sub,msg,to=[x.User_Email])
+			email.send()
+		return HttpResponse("<script>alert('Certificate Sent Successfully'); window.location.replace('/admincompletecourses/')</script>")
+def downloadcert(request):
+	certpath=''
+	mid=request.GET.get('certid')
+	if CertificatesData.objects.filter(Cert_ID=mid).exists():
+		for x in CertificatesData.objects.filter(Cert_ID=mid):
+			certpath=x.Certificate
+		file_path = os.path.join(settings.MEDIA_ROOT, str(certpath))
+		if os.path.exists(file_path):
+			with open(file_path, 'rb') as fh:
+				response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+				response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+				return response
+			raise Http404
+	else:
+		return HttpResponse("<script>alert('File Not Found'); window.location.replace('/index/')</script>")
 def adminsendbulk(request):
 	return render(request,'adminpages/sendbulk.html',{})
 def adminsendtoone(request):

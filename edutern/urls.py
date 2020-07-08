@@ -25,6 +25,9 @@ urlpatterns = [
     path('socialreg/', socialreg),
     path('socialsave/', socialsave),
     path('logout/', logout),
+    path('downloadcert/', downloadcert),
+    path('admindeleteenrolls/', admindeleteenrolls),
+    path('adminlogout/', adminlogout),
 
     path('adminindex/',adminindex),
     path('adminlogin/',adminlogin),

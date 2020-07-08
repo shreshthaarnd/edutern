@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edutern - Course List</title>
+    <title>Edutern - Courses Enrolls</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -149,16 +149,18 @@
                                     <thead>
                                         <tr>
                                             <th>Course ID</th>
-                                            <th>Lecture ID</th>
+                                            <th>User ID</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for x in data %}
                                         <tr>
-                                            <td>MAT45</td>
-                                            <td>BTEC456</td>
-                                            <td><a class="btn btn-danger" href="">Cancle</a></td>
+                                            <td>{{ x.Course_ID|safe }}</td>
+                                            <td>{{ x.UserID|safe }}</td>
+                                            <td><a class="btn btn-danger" href="/admindeleteenrolls/?cid={{ x.Course_ID|safe }}&uid={{ x.UserID|safe }}">Cancel Enroll</a></td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>

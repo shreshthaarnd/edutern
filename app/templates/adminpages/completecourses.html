@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edutern - Lectures List</title>
+    <title>Edutern - Complete User Courses List</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -28,7 +28,15 @@
 
     <link rel="stylesheet" href="{% static 'adminpages/assets/css/style.css' %}">
 
+    <link rel="stylesheet" href="{% static 'w3.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        [type="file"] {
+          height: 0;
+          overflow: hidden;
+          width: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -148,17 +156,29 @@
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Cousre ID</th>
                                             <th>User ID</th>
+                                            <th>Cousre ID</th>
                                             <th>Status</th>
+                                            <th>Send Certificate</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for data in data_items %}
+                                        {% if data.2 == 100 %}
+                                       
                                         <tr>
-                                            <td>SDGH67</td>
-                                            <td>HKYU78</td>
-                                            <td>Complete</td>
+                                            <form action="/adminsendcertificate/" method="POST" id="cert" enctype="multipart/form-data">
+                                                <td><input type="hidden" value="{{data.0}}" name="user">{{data.0}}</td>
+                                                <td><input type="hidden" value="{{data.1}}" name="course">{{data.1}}</td>
+                                                <td>Complete</td>
+                                                <td>
+                                                    <input type="file" id="file" name="cert" onchange="GetPath()"/ required>
+                                                    <label style="border-radius:10px;width:100%;" id="myFile" for="file" class="w3-button w3-green w3-hover-light-green">Select File</label>
+                                                </td>
+                                            </form>
                                         </tr>
+                                        {% endif %}
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>
@@ -195,7 +215,12 @@
     <script src="{% static 'adminpages/vendors/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>
     <script src="{% static 'adminpages/assets/js/init-scripts/data-table/datatables-init.js' %}"></script>
 
-
+    <script type="text/javascript">
+        function GetPath() { 
+            document.getElementById('myFile').innerHTML = document.getElementById("file").value;
+            document.getElementById('cert').submit()
+        }
+    </script>
 </body>
 
 </html>

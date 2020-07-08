@@ -55,3 +55,9 @@ class UserLectures(models.Model):
 	Course_ID=models.CharField(max_length=20,null=True,blank=True)
 	Lecture_ID=models.CharField(max_length=20,null=True,blank=True)
 	Lecture_Watched=models.BooleanField(default=False)
+
+class CertificatesData(models.Model):
+	Cert_ID=models.CharField(max_length=20, primary_key=True)
+	Certificate=models.FileField(upload_to='cert/')
+	class Meta:
+		db_table="CertificatesData"
