@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edutern - Add Course</title>
+    <title>Edutern - Add Coupons</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -79,13 +79,6 @@
                             <li><i class="fa fa-paper-plane"></i><a href="/adminsendcertificate/">Send Certificates</a></li>
                         </ul>
                     </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-graduation-cap"></i>Coupons Panel</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-check-square"></i><a href="/adminaddcoupons/">Add Coupons</a></li>
-                            <li><i class="fa fa-window-close"></i><a href="/admincouponslist/">Coupons List</a></li>
-                        </ul>
-                    </li>
                     
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -137,32 +130,20 @@
 
         <div style="padding:30px;">
             <div class="card">
-                <div class="card-header"><strong>Add Course</strong><small> Form</small></div>
+                <div class="card-header"><strong>Add Coupons</strong><small> Form</small></div>
                     <div class="card-body card-block">
                         <form action="/adminsavecourse/" method="POST" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="company" class=" form-control-label">Course Name</label>
-                                <input type="text" placeholder="Course Name" name="name" class="form-control">
+                                <label for="company" class=" form-control-label">Coupon Name</label>
+                                <input type="text" placeholder="Coupon Name" name="name" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="company" class=" form-control-label">Trainer Name</label>
-                                <input type="text" placeholder="Trainer Name" name="trainer" class="form-control">
+                                <label for="company" class=" form-control-label">Coupon Code</label>
+                                <input type="text" placeholder="Coupon Code" name="trainer" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="company" class=" form-control-label">Course Fee</label>
-                                <input type="number" placeholder="Course Fee" name="fee" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="company" class=" form-control-label">Objective</label>
-                                <textarea type="text" placeholder="Course Objective" name="objective" style="height:150px;" class="form-control"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="company" class=" form-control-label">Eligibility</label>
-                                <textarea type="text" placeholder="Course Eligibility" name="eligibility" style="height:150px;" class="form-control"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="company" class=" form-control-label">Course Thumbnail</label>
-                                <input type="file" name="thumbnail" class="form-control">
+                                <label for="company" class=" form-control-label">Discount Percentage</label>
+                                <input type="number" placeholder="Discount Percentage" name="fee" class="form-control">
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Save" class="btn btn-success" onclick="document.getElementById('process').style.display='block';">

@@ -63,6 +63,8 @@ urlpatterns = [
     path('adminsendcertificate/',adminsendcertificate),
     path('adminsendbulk/',adminsendbulk),
     path('adminsendtoone/',adminsendtoone),
+    path('adminaddcoupons/',adminaddcoupons),
+    path('admincouponslist/',admincouponslist),
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

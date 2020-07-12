@@ -648,3 +648,7 @@ def adminsendbulk(request):
 	return render(request,'adminpages/sendbulk.html',{})
 def adminsendtoone(request):
 	return render(request,'adminpages/sendtoone.html',{})
+def adminaddcoupons(request):
+	return render(request,'adminpages/addcoupons.html',{})
+def admincouponslist(request):
+	return render(request,'adminpages/couponslist.html',{})
