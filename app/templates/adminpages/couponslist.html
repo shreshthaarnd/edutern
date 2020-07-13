@@ -150,13 +150,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for data in data %}
                                         <tr>
-                                            <td>COU001</td>
-                                            <td>Test Coupon</td>
-                                            <td>TESTCP</td>
-                                            <td>10%</td>
-                                            <td><a class="btn btn-danger" href="/makeuserdeactive/?uid={{ x.User_ID|safe }}">Delete</a></td>
+                                            <td>{{data.Coupon_ID}}</td>
+                                            <td>{{data.Coupon_Name}}</td>
+                                            <td>{{data.Coupon_Code}}</td>
+                                            <td>{{data.Discount}}%</td>
+                                            <td><a class="btn btn-danger" href="/admindeletecoupon/?cid={{ data.Coupon_ID }}">Delete</a></td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>

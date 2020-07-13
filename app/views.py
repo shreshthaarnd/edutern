@@ -649,6 +649,52 @@ def adminsendbulk(request):
 def adminsendtoone(request):
 	return render(request,'adminpages/sendtoone.html',{})
 def adminaddcoupons(request):
-	return render(request,'adminpages/addcoupons.html',{})
+	if request.method=='POST':
+		coupon_name=request.POST['coupon_name']
+		coupon_code=request.POST['code']
+		discount=int(request.POST['discount'])
+		l="COU00"
+		x=1
+		lid=l+str(x)
+		while CouponData.objects.filter(Coupon_ID=lid).exists():
+			x=x+1
+			lid=l+str(x)
+		x=int(x)
+		if CouponData.objects.filter(Coupon_Name=coupon_name).exists():
+			return HttpResponse("Coupon Name already exists")
+		else:
+			data=CouponData(Coupon_ID=lid,Coupon_Name=coupon_name,Coupon_Code=coupon_code,Discount=discount)
+			data.save()
+			return redirect('/admincouponslist/')
+	else:	
+		return render(request,'adminpages/addcoupons.html',{})
 def admincouponslist(request):
-	return render(request,'adminpages/couponslist.html',{})
+	data=CouponData.objects.all()
+	return render(request,'adminpages/couponslist.html',{'data':data})
+def admindeletecoupon(request):
+	coupon_id=request.GET.get('cid')
+	data=CouponData.objects.filter(Coupon_ID=coupon_id).delete()
+	return redirect('/admincouponslist/')
+
+def instructorform(request):
+	if request.method=='POST':
+		name=request.POST['fname']
+		mobile=request.POST['mobile']
+		email=request.POST['email']
+		sub='Edutern - 	A NEW INSTRUCTOR FILL THE FORM'
+		msg='Name : {}\n Email : {} \n Mobile :{}'.format(name,email,mobile)
+		#print(msg)
+		email=EmailMessage(sub,msg,to=['shreshtharnd20@gmail.com'])
+		email.send()
+		return HttpResponse("<script>alert('Your query has been submitted succesfully'); window.location.replace(/index/)</script>")
+def enquiryform(request):
+	if request.method=='POST':
+		name=request.POST['fname']
+		mobile=request.POST['mobile']
+		email=request.POST['email']
+		sub='Edutern - 	A NEW USER FILL THE ENQUIRY FORM'
+		msg='Name : {}\n Email : {} \n Mobile :{}'.format(name,email,mobile)
+		#print(msg)
+		email=EmailMessage(sub,msg,to=['shreshtharnd20@gmail.com'])
+		email.send()
+		return HttpResponse("<script>alert('Your query has been submitted succesfully'); window.location.replace(/index/)</script>")

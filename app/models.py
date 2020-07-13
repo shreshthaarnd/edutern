@@ -61,3 +61,11 @@ class CertificatesData(models.Model):
 	Certificate=models.FileField(upload_to='cert/')
 	class Meta:
 		db_table="CertificatesData"
+
+class CouponData(models.Model):
+	Coupon_ID=models.CharField(max_length=20,primary_key=True)
+	Coupon_Name=models.CharField(max_length=200)
+	Coupon_Code=models.CharField(max_length=200)
+	Discount=models.IntegerField()
+	def __str__(self):
+		return self.Coupon_ID

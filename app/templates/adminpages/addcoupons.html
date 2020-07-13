@@ -132,18 +132,20 @@
             <div class="card">
                 <div class="card-header"><strong>Add Coupons</strong><small> Form</small></div>
                     <div class="card-body card-block">
-                        <form action="/adminsavecourse/" method="POST" enctype="multipart/form-data">
+                        <form action="/adminaddcoupons/" method="POST" enctype="multipart/form-data">
+                           {% csrf_token %}
                             <div class="form-group">
+                                
                                 <label for="company" class=" form-control-label">Coupon Name</label>
-                                <input type="text" placeholder="Coupon Name" name="name" class="form-control">
+                                <input type="text" placeholder="Coupon Name" name="coupon_name" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="company" class=" form-control-label">Coupon Code</label>
-                                <input type="text" placeholder="Coupon Code" name="trainer" class="form-control">
+                                <input type="text" placeholder="Coupon Code" name="code" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="company" class=" form-control-label">Discount Percentage</label>
-                                <input type="number" placeholder="Discount Percentage" name="fee" class="form-control">
+                                <input type="number" placeholder="Discount Percentage" name="discount" class="form-control">
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Save" class="btn btn-success" onclick="document.getElementById('process').style.display='block';">

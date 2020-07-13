@@ -356,7 +356,8 @@
 					<div class="register_form">
 						<h3>Send Now</h3>
 						<p>It is high time for learning</p>
-						<form class="form_area" action="/saveuser/" method="POST">
+						<form class="form_area" action="/instructorform/" method="POST">
+							{% csrf_token %}
 							<div class="row">
 								<div class="col-lg-12 form_group">
 									<input name="fname" placeholder="Name" required type="text">
@@ -477,7 +478,8 @@
 					<div class="register_form">
 						<h3>Enquire Now</h3>
 						<p>It is high time for learning</p>
-						<form class="form_area" action="/saveuser/" method="POST">
+						<form class="form_area" action="/enquiryform/" method="POST">
+							{% csrf_token %}
 							<div class="row">
 								<div class="col-lg-12 form_group">
 									<input name="fname" placeholder="Name" required type="text">
