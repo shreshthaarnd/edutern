@@ -79,6 +79,13 @@
                             <li><i class="fa fa-paper-plane"></i><a href="/adminsendcertificate/">Send Certificates</a></li>
                         </ul>
                     </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-graduation-cap"></i>Coupons Panel</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-check-square"></i><a href="/adminaddcoupons/">Add Coupons</a></li>
+                            <li><i class="fa fa-window-close"></i><a href="/admincouponslist/">Coupons List</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -141,6 +148,8 @@
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
+                                            <th>Payment ID</th>
+                                            <th>Coupon ID</th>
                                             <th>Course ID</th>
                                             <th>User ID</th>
                                             <th>Action</th>
@@ -149,9 +158,11 @@
                                     <tbody>
                                         {% for x in data %}
                                         <tr>
+                                            <td>{{ x.Pay_ID|safe }}</td>
+                                            <td>{{ x.Coupon|safe }}</td>
                                             <td>{{ x.Course_ID|safe }}</td>
                                             <td>{{ x.UserID|safe }}</td>
-                                            <td><a class="btn btn-danger" href="/admindeleteenrolls/?cid={{ x.Course_ID|safe }}&uid={{ x.UserID|safe }}">Cancel Enroll</a></td>
+                                            <td><a class="btn btn-danger" href="/admindeleteenrolls/?cid={{ x.Course_ID|safe }}&uid={{ x.UserID|safe }}&pid={{ x.Pay_ID|safe }}">Cancel Enroll</a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

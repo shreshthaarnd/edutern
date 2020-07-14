@@ -43,7 +43,7 @@ def coursedetails(request):
 			course_data=CourseData.objects.filter(Course_ID=course_id)
 			lecture_data=LecturesData.objects.filter(Course_ID=course_id).all()
 			reviews=UserReviews.objects.filter(Course_ID=course_id).all()
-			if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id).exists():
+			if  UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id,status=True).exists():
 				status=True
 				if not UserReviews.objects.filter(User_ID=user_id,Course_ID=course_id).exists():
 					review_status=True
@@ -275,7 +275,14 @@ def adminlogincheck(request):
 def adminindex(request):
 	try:
 		adminid=request.session['adminid']
-		return redirect('/adminaddcourse/')
+		users=len(UserData.objects.all())
+		courses=len(CourseData.objects.all())
+		payment=0.0
+		for x in PaymentData.objects.filter(RESPCODE='01'):
+			payment=payment+float(x.TXNAMOUNT)
+		dic={'users':users,'courses':courses,'payment':payment}
+		#return redirect('/adminaddcourse/')
+		return render(request,'adminpages/index.html',dic)
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def adminlogout(request):
@@ -335,7 +342,7 @@ def admincourselist(request):
 def userdashboard(request):
 	uid=request.session['userid']
 	data=UserData.objects.filter(User_ID=uid).all()
-	mycourse=UserCourses.objects.filter(UserID=uid)
+	mycourse=UserCourses.objects.filter(UserID=uid,status=True)
 	course_progress={}
 	for i in mycourse:
 		progress=get_Progress(request,i.Course_ID)
@@ -430,23 +437,7 @@ def editPassword(request):
 				return HttpResponse("<script>alert('Congratulations !! Your Password is SuccessFully Updated'); window.location.replace('/userdashboard/')</script>")
 		else:
 			return HttpResponse("<script>alert('Pleasr check your old password'); window.location.replace('/userdashboard/')</script>")
-def checkout(request):
-	if request.method=='POST':
-		course_id=request.GET.get('course_id')
-		user_id=request.session['userid']
-		usercourse=UserCourses(UserID_id=user_id,Course_ID=course_id,status=True)
-		usercourse.save()
-		lectures=LecturesData.objects.filter(Course_ID=course_id).all()
-		if UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id,status=True).exists():
-			for i in lectures:
-				dt=UserLectures(User_ID=user_id,Course_ID=i.Course_ID,Lecture_ID=i.Lecture_ID,Lecture_Watched=False)
-				dt.save()
-		return HttpResponse("<script>alert('Congratulations !! Your course is SuccessFully Buyed'); window.location.replace('/userdashboard/')</script>")
 
-	else:
-		course_id=request.GET.get('course_id')
-		course_data=CourseData.objects.filter(Course_ID=course_id)
-		return render(request,'checkout.html',{'course_data':course_data,'checksession':check_user(request)})
 def adminaddlectures(request):
 	try:
 		adminid=request.session['adminid']
@@ -524,7 +515,7 @@ def makeuseractive(request):
 def admincourseenrolls(request):
 	try:
 		adminid=request.session['adminid']
-		enrolls=UserCourses.objects.all()
+		enrolls=UserCourses.objects.filter(status=True)
 		return render(request,'adminpages/courseenrolls.html',{'data':enrolls})
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
@@ -533,13 +524,19 @@ def admindeleteenrolls(request):
 		adminid=request.session['adminid']
 		cid=request.GET.get('cid')
 		uid=request.GET.get('uid')
-		UserCourses.objects.filter(UserID=uid,Course_ID=cid).delete()
+		pid=request.GET.get('pid')
+		UserCourses.objects.filter(Pay_ID=pid).delete()
 		UserLectures.objects.filter(UserID=uid,Course_ID=cid).delete()
 		return redirect('/admincourseenrolls/')
 	except:
 		return HttpResponse('<h1>Error 404 : Page Not Found</h1>')
 def admincoursespayment(request):
-	return render(request,'adminpages/coursespayment.html',{})
+	try:
+		adminid=request.session['adminid']
+		data=PaymentData.objects.all()
+		return render(request,'adminpages/coursespayment.html',{'data':data})
+	except:
+		return redirect('/index/')
 def adminuserreview(request):
 	try:
 		adminid=request.session['adminid']
@@ -629,19 +626,29 @@ Team Edutern'''
 			email=EmailMessage(sub,msg,to=[x.User_Email])
 			email.send()
 		return HttpResponse("<script>alert('Certificate Sent Successfully'); window.location.replace('/admincompletecourses/')</script>")
+import requests
 def downloadcert(request):
 	certpath=''
+	filename=''
 	mid=request.GET.get('certid')
 	if CertificatesData.objects.filter(Cert_ID=mid).exists():
 		for x in CertificatesData.objects.filter(Cert_ID=mid):
-			certpath=x.Certificate
-		file_path = os.path.join(settings.MEDIA_ROOT, str(certpath))
-		if os.path.exists(file_path):
-			with open(file_path, 'rb') as fh:
-				response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-				response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-				return response
-			raise Http404
+			certpath=x.Certificate.url
+			filename=x.Certificate
+		url = certpath
+		filename=str(filename)[5:len(str(filename))]
+		r = requests.get(url, allow_redirects=True)
+		filedownload = open(filename, 'wb').write(r.content)
+		fl_path = filename
+		file_path = filename
+		file_wrapper = FileWrapper(open(filename, 'rb'))
+		file_mimetype, _ = mimetypes.guess_type(file_path)
+		response = HttpResponse(file_wrapper, content_type=file_mimetype )
+		response['X-Sendfile'] = file_path
+		response['Content-Length'] = os.stat(file_path).st_size
+		response['Content-Disposition'] = 'attachment; filename=%s' % file_path
+		os.remove(filename)
+		return response
 	else:
 		return HttpResponse("<script>alert('File Not Found'); window.location.replace('/index/')</script>")
 def adminsendbulk(request):
@@ -660,8 +667,8 @@ def adminaddcoupons(request):
 			x=x+1
 			lid=l+str(x)
 		x=int(x)
-		if CouponData.objects.filter(Coupon_Name=coupon_name).exists():
-			return HttpResponse("Coupon Name already exists")
+		if CouponData.objects.filter(Coupon_Code=coupon_code).exists():
+			return HttpResponse("Coupon Code already exists")
 		else:
 			data=CouponData(Coupon_ID=lid,Coupon_Name=coupon_name,Coupon_Code=coupon_code,Discount=discount)
 			data.save()
@@ -669,12 +676,20 @@ def adminaddcoupons(request):
 	else:	
 		return render(request,'adminpages/addcoupons.html',{})
 def admincouponslist(request):
-	data=CouponData.objects.all()
-	return render(request,'adminpages/couponslist.html',{'data':data})
+	try:
+		adminid=request.session['adminid']
+		data=CouponData.objects.all()
+		return render(request,'adminpages/couponslist.html',{'data':data})
+	except:
+		return redirect('/index/')
 def admindeletecoupon(request):
-	coupon_id=request.GET.get('cid')
-	data=CouponData.objects.filter(Coupon_ID=coupon_id).delete()
-	return redirect('/admincouponslist/')
+	try:
+		adminid=request.session['adminid']
+		coupon_id=request.GET.get('cid')
+		data=CouponData.objects.filter(Coupon_ID=coupon_id).delete()
+		return redirect('/admincouponslist/')
+	except:
+		return redirect('/index/')
 
 def instructorform(request):
 	if request.method=='POST':
@@ -698,3 +713,189 @@ def enquiryform(request):
 		email=EmailMessage(sub,msg,to=['shreshtharnd20@gmail.com'])
 		email.send()
 		return HttpResponse("<script>alert('Your query has been submitted succesfully'); window.location.replace(/index/)</script>")
+
+#Payment Code
+import app.Checksum as Checksum
+def checkout(request):
+	if request.method=='GET':
+		course_id=request.GET.get('course_id')
+		user_id=request.session['userid']
+		l="PAY00"
+		x=1
+		lid=l+str(x)
+		while UserCourses.objects.filter(Pay_ID=lid).exists():
+			x=x+1
+			lid=l+str(x)
+		x=int(x)
+		usercourse=UserCourses(Pay_ID=lid,UserID_id=user_id,Course_ID=course_id,status=False)
+		usercourse.save()
+		'''lectures=LecturesData.objects.filter(Course_ID=course_id).all()
+		if UserCourses.objects.filter(UserID_id=user_id,Course_ID=course_id,status=True).exists():
+			for i in lectures:
+				dt=UserLectures(User_ID=user_id,Course_ID=i.Course_ID,Lecture_ID=i.Lecture_ID,Lecture_Watched=False)
+				dt.save()'''
+		amount=''
+		for x in CourseData.objects.filter(Course_ID=course_id):
+			amount=x.Course_Fee
+		dic={
+			'ORDER_ID':lid,
+			'TXN_AMOUNT':str(amount),
+			'CUST_ID':user_id,
+			'INDUSTRY_TYPE_ID':'Retail',
+			'CHANNEL_ID':'WEB',
+			'WEBSITE':'WEBSTAGING',
+			'CALLBACK_URL':'http://127.0.0.1:8000/verifypayment/'
+		}
+		MERCHANT_KEY = 'gDokYWVAFFW9OSlZ'
+		MID = 'bAQrse69179758299775'
+		data_dict = {'MID':MID}
+		data_dict.update(dic)
+		param_dict = data_dict
+		param_dict['CHECKSUMHASH'] =Checksum.generateSignature(data_dict, MERCHANT_KEY)
+		param_dict.update({'coupon':CouponData.objects.all(),'checksession':check_user(request),'course_data':CourseData.objects.filter(Course_ID=course_id)})
+		return render(request,'checkout.html',param_dict)
+	else:
+		return redirect('/index/')
+@csrf_exempt
+def applypromocode(request):
+	course_id=request.GET.get('courseid')
+	promo=request.GET.get('promo')
+	user_id=request.session['userid']
+	l="PAY00"
+	x=1
+	lid=l+str(x)
+	while UserCourses.objects.filter(Pay_ID=lid).exists():
+		x=x+1
+		lid=l+str(x)
+	x=int(x)
+	usercourse=UserCourses(Coupon=promo,Pay_ID=lid,UserID_id=user_id,Course_ID=course_id,status=False)
+	usercourse.save()
+	amount=0
+	discount=0
+	for x in CouponData.objects.filter(Coupon_ID=promo):
+		discount=int(x.Discount)
+	for x in CourseData.objects.filter(Course_ID=course_id):
+		amount=int(x.Course_Fee)
+	amounttopay=amount-((amount/100)*discount)
+	dic={
+		'ORDER_ID':lid,
+		'TXN_AMOUNT':str(amounttopay),
+		'CUST_ID':user_id,
+		'INDUSTRY_TYPE_ID':'Retail',
+		'CHANNEL_ID':'WEB',
+		'WEBSITE':'WEBSTAGING',
+		'CALLBACK_URL':'http://127.0.0.1:8000/verifypayment/'
+	}
+	MERCHANT_KEY = 'gDokYWVAFFW9OSlZ'
+	MID = 'bAQrse69179758299775'
+	data_dict = {'MID':MID}
+	data_dict.update(dic)
+	param_dict = data_dict
+	param_dict['CHECKSUMHASH'] =Checksum.generateSignature(data_dict, MERCHANT_KEY)
+	param_dict.update({'coupon':CouponData.objects.all(),'checksession':check_user(request),'course_data':CourseData.objects.filter(Course_ID=course_id)})
+	return render(request,'checkout.html',param_dict)
+import cgi
+@csrf_exempt
+def verifypayment(request):
+		MERCHANT_KEY = 'gDokYWVAFFW9OSlZ'
+		MID = 'bAQrse69179758299775'
+		CURRENCY=request.POST.get('CURRENCY')
+		GATEWAYNAME=request.POST.get('GATEWAYNAME')
+		RESPMSG=request.POST.get('RESPMSG')
+		BANKNAME=request.POST.get('BANKNAME')
+		PAYMENTMODE=request.POST.get('PAYMENTMODE')
+		RESPCODE=request.POST.get('RESPCODE')
+		TXNID=request.POST.get('TXNID')
+		TXNAMOUNT=request.POST.get('TXNAMOUNT')
+		ORDERID=request.POST.get('ORDERID')
+		STATUS=request.POST.get('STATUS')
+		BANKTXNID=request.POST.get('BANKTXNID')
+		TXNDATE=request.POST.get('TXNDATE')
+		CHECKSUMHASH=request.POST.get('CHECKSUMHASH')
+		respons_dict = {
+						'MERCHANT_KEY':MERCHANT_KEY,
+						'CURRENCY':CURRENCY,
+						'GATEWAYNAME':GATEWAYNAME,
+						'RESPMSG':RESPMSG,
+						'BANKNAME':BANKNAME,
+						'PAYMENTMODE':PAYMENTMODE,
+						'MID':MID,
+						'RESPCODE':RESPCODE,
+						'TXNID':TXNID,
+						'TXNAMOUNT':TXNAMOUNT,
+						'ORDERID':ORDERID,
+						'STATUS':STATUS,
+						'BANKTXNID':BANKTXNID,
+						'TXNDATE':TXNDATE,
+						'CHECKSUMHASH':CHECKSUMHASH
+		}
+		checksum=respons_dict['CHECKSUMHASH']
+		if 'GATEWAYNAME' in respons_dict:
+			if respons_dict['GATEWAYNAME'] == 'WALLET':
+				respons_dict['BANKNAME'] = 'null';
+		obj=PaymentData(
+			Pay_ID=ORDERID,
+			CURRENCY=CURRENCY,
+			GATEWAYNAME=str(GATEWAYNAME),
+			RESPMSG=RESPMSG,
+			BANKNAME=str(BANKNAME),
+			PAYMENTMODE=str(PAYMENTMODE),
+			RESPCODE=RESPCODE,
+			TXNID=str(TXNID),
+			TXNAMOUNT=TXNAMOUNT,
+			STATUS=STATUS,
+			BANKTXNID=BANKTXNID,
+			TXNDATE=str(TXNDATE),
+			CHECKSUMHASH=str(CHECKSUMHASH)
+			)
+		obj.save()
+		obj=UserCourses.objects.filter(Pay_ID=ORDERID)
+		for x in obj:
+			request.session['userid']=str(x.UserID)
+		custid=request.session['userid']
+		data_dict = {
+			'MID':respons_dict['MID'],
+			'ORDER_ID':ORDERID,
+			'TXN_AMOUNT':TXNAMOUNT,
+			'CUST_ID':custid,
+			'INDUSTRY_TYPE_ID':'Retail',
+			'CHANNEL_ID':'WEB',
+			'WEBSITE':'WEBSTAGING',
+			'CALLBACK_URL':'http://127.0.0.1:8000/verifypayment/'
+			}
+		checksum =Checksum.generateSignature(data_dict, MERCHANT_KEY)
+		print('Hello')
+		verify = Checksum.verifySignature(data_dict, MERCHANT_KEY, checksum)
+		if verify:
+			if respons_dict['RESPCODE'] == '01':
+				obj=UserCourses.objects.filter(Pay_ID=ORDERID)
+				obj.update(status=True)
+				dic={'TXNID':TXNID}
+				for x in obj:
+					lectures=LecturesData.objects.filter(Course_ID=x.Course_ID).all()
+					if UserCourses.objects.filter(Pay_ID=ORDERID,UserID_id=request.session['userid'],Course_ID=x.Course_ID,status=True).exists():
+						for i in lectures:
+							dt=UserLectures(User_ID=user_id,Course_ID=i.Course_ID,Lecture_ID=i.Lecture_ID,Lecture_Watched=False)
+							dt.save()
+					for y in CourseData.objects.filter(Course_ID=x.Course_ID):
+						dic.update({'COURSE':y.Course_Name,
+									'checksession':check_user(request)})
+				return render(request,'paysuccess.html',dic)
+			else:
+				dic={'TXNID':TXNID,
+					'RESPMSG':RESPMSG,
+					'checksession':check_user(request)}
+				return render(request,'payfailed.html',dic)
+		else:
+			dic={'TXNID':TXNID,
+					'RESPMSG':RESPMSG,
+					'checksession':check_user(request)}
+			return render(request,'payfailed.html',dic)
+
+def downloaddatabase(request):
+	try:
+		aid=request.session['adminid']
+		table=request.GET.get('tablename')
+		return downloaddata(table)
+	except:
+		return redirect('/index/')

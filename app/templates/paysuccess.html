@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
-    <title>Edutern - Checkout</title>
+    <title>Edutern - Payment Successful</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}">
@@ -99,20 +99,23 @@
 
     <!--================Home Banner Area =================-->
     <section class="banner_area">
-        <div class="banner_inner d-flex align-items-center">
-            <div class="overlay"></div>
+        <div class="banner_inner d-flex align-items-center w3-light-green">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="banner_content text-center">
-                            <h2>Checkout</h2>
-                            <p>In the history of modern astronomy, there is probably no one greater leap forward than
-                                the
-                                building and launch of the space telescope known as the Hubble.</p>
+                            <h2><i class="fa fa-check"></i> Successful</h2>
+                            <p>Your course has been successfully added to your my course section.</p>
                             <div class="page_link">
-                                <a href="index.html">Home</a>
-                                <a href="contact.html">Checkout</a>
-                            </div>
+                                <a href="">Transaction ID</a>
+                                <a href="">{{ TXNID|safe }}</a>
+                            </div><br>
+                            <div class="page_link">
+                                <a href="">Course Name</a>
+                                <a href="">{{ COURSE|safe }}</a>
+                            </div><br><br>
+                            <p>Please save the above details for future assistance.</p>
+                            <a href="/userdashboard/" style="margin-bottom:20px;" class="w3-button w3-white w3-hover-black">My Dashboard</a>
                         </div>
                     </div>
                 </div>
@@ -120,75 +123,6 @@
         </div>
     </section>
     <!--================End Home Banner Area =================-->
-
-    <!--================Contact Area =================-->
-    <section class="contact_area section_gap">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <h3 style="margin-bottom:20px;">Course Choosen</h3>
-                    <div class="single_course">
-                        <div class="course_head overlay">
-                            <img class="img-fluid w-100" src="{% static 'img/courses/trainer1.jpg' %}" alt="">
-                        </div>
-                        <div class="course_content">
-                            <h4>
-                                <a href="course-details.html">{% for i in course_data %}{{i.Course_Name}}{% endfor %}</a>
-                            </h4>
-                            <p>{% for i in course_data %}{{i.Course_Name}}{% endfor %}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="width:850px;padding:20px;"class="column">
-                    <table style="width:100%;" class="w3-table">
-                        <tr>
-                            <td>
-                                <form class="w3-container" action="/applypromocode/" method="GET">
-                                    <input type="hidden" name="courseid" value="{% for i in course_data %}{{i.Course_ID}}{% endfor %}">
-                                    <select class="w3-select" name="promo">
-                                        {% for x in coupon %}
-                                        <option value="{{ x.Coupon_ID|safe }}">{{ x.Coupon_Code|safe }} - {{ x.Coupon_Name|safe }}</option>
-                                        {% endfor %}
-                                    </select>
-                            </td>
-                            <td>
-                                <input type="submit" value="Apply Promocode" class="btn primary-btn">
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h2>Total Amount to be Paid</h2>
-                            </td>
-                            <td>
-                                <h2> <i class="fa fa-inr"></i> {{ TXN_AMOUNT|safe }}</h2>
-                            </td>
-                        </tr>
-                    </table>
-                    <form method="POST" action="https://securegw-stage.paytm.in/order/process" id="pay1">
-                        <input name="MID" type="hidden" value="{{ MID|safe }}">
-                        <input name="ORDER_ID" type="hidden" value="{{ ORDER_ID|safe }}">
-                        <input name="TXN_AMOUNT" type="hidden" value="{{ TXN_AMOUNT|safe }}">
-                        <input name="CUST_ID" type="hidden" value="{{ CUST_ID|safe }}">
-                        <input name="INDUSTRY_TYPE_ID" type="hidden" value="{{ INDUSTRY_TYPE_ID|safe }}">
-                        <input name="WEBSITE" type="hidden" value="{{ WEBSITE|safe }}">
-                        <input name="CHANNEL_ID" type="hidden" value="{{ CHANNEL_ID|safe }}">
-                        <input name="CALLBACK_URL" type="hidden" value="{{ CALLBACK_URL|safe }}">
-                        <input name="CHECKSUMHASH" type="hidden" value="{{ CHECKSUMHASH|safe }}">
-                        <input style="width:100%;"type="Submit" class="btn primary-btn" onclick="document.getElementById('pay').style.display = 'block';document.getElementById('pay1').submit();" value="Proceed to Pay">
-                    </form>
-                    <div style="padding:50px;display:none;" id="pay" class="text-center">
-                        <img style="width:100px;" src="{% static 'img/loading.gif' %}">
-                        <h3>Processing Your Transaction</h3>
-                        <h4>Please Wait</h4>
-                        <span style="font-size:20px;color:red;">Do Not Press 'Refresh' Or 'Back Button'</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--================Contact Area =================-->
 
     <!--================ start footer Area  =================-->
     <footer class="footer-area section_gap" style="padding-bottom:20px;">
